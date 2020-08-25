@@ -1,5 +1,9 @@
 <template>
   <canvas ref="canvas" />
+  <button @click="setDir('up')">up</button>
+  <button @click="setDir('down')">down</button>
+  <button @click="setDir('left')">left</button>
+  <button @click="setDir('right')">right</button>
 </template>
 
 <script lang="ts">
@@ -20,21 +24,27 @@ const chunkSize = Math.min(WIDTH / COLS, HEIGHT / COLS)
 export default {
   setup() {
     const canvas = ref<HTMLCanvasElement>()
-
+    const board = ref<Board>()
+    const viper = ref<Viper>()
     onMounted(() => {
-      const board = new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 })
-
-      // board.drawFigure(1, 2, figures.Tail.right)
-      // board.drawFigure(2, 2, figures.Body.right)
-      // board.drawFigure(3, 2, figures.Body.right)
-      // board.drawFigure(4, 2, figures.Body.right)
-      // board.drawFigure(7, 2, figures.Head.right)
-
-      const viper = new Viper({ row: 0, col: 2 }, Dir.right)
-      board.drawChunks(viper.getChunks())
+      board.value = new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 })
+      viper.value = new Viper({ row: 0, col: 0 }, Dir.right)
+      viper.value.grow()
+      viper.value.grow()
+      viper.value.advance()
+      viper.value.setDir(Dir.down)
+      viper.value.advance()
+      viper.value.advance()
+      board.value.drawChunks(viper.value.getChunks())
     })
 
-    return { canvas }
+    // setInterval(() => {
+    // board.value.drawChunks(viper.value.getChunks())
+    // }, 100)
+
+    const setDir = (dir: Dir) => viper.value.setDir(dir)
+
+    return { canvas, setDir }
   },
 }
 </script>

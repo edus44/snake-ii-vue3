@@ -18,5 +18,3 @@ export type Position = {
   col: number
   row: number
 }
-
-export type Orientation = [Dir, Dir] | Dir
