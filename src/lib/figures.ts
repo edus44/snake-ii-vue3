@@ -85,43 +85,7 @@ export const HeadMouth: FigureMapDir = {
     [2, 2],
   ],
 }
-export const Body: FigureMapDir = {
-  up: [
-    [1, 0],
-    [2, 0],
-    [2, 1],
-    [1, 2],
-    [1, 3],
-    [2, 3],
-  ],
 
-  right: [
-    [0, 1],
-    [0, 2],
-    [1, 1],
-    [2, 2],
-    [3, 2],
-    [3, 1],
-  ],
-
-  down: [
-    [1, 0],
-    [2, 0],
-    [1, 1],
-    [2, 2],
-    [1, 3],
-    [2, 3],
-  ],
-
-  left: [
-    [0, 1],
-    [0, 2],
-    [2, 1],
-    [1, 2],
-    [3, 2],
-    [3, 1],
-  ],
-}
 export const Tail: FigureMapDir = {
   up: [
     [1, 0],
@@ -157,6 +121,43 @@ export const Tail: FigureMapDir = {
     [1, 2],
     [2, 2],
     [3, 2],
+  ],
+}
+export const Body: FigureMapDir = {
+  up: [
+    [1, 0],
+    [2, 0],
+    [2, 1],
+    [1, 2],
+    [1, 3],
+    [2, 3],
+  ],
+
+  right: [
+    [0, 1],
+    [0, 2],
+    [1, 1],
+    [2, 2],
+    [3, 2],
+    [3, 1],
+  ],
+
+  down: [
+    [1, 0],
+    [2, 0],
+    [1, 1],
+    [2, 2],
+    [1, 3],
+    [2, 3],
+  ],
+
+  left: [
+    [0, 1],
+    [0, 2],
+    [2, 1],
+    [1, 2],
+    [3, 2],
+    [3, 1],
   ],
 }
 
@@ -207,6 +208,36 @@ BodyCorner.left = {
   up: BodyCorner.down.right,
   down: BodyCorner.up.right,
 }
+
+export const BodyFood: Partial<FigureMapDir> = {
+  up: [
+    [1, 0],
+    [2, 0],
+    [0, 2],
+    [1, 2],
+    [3, 2],
+    [0, 1],
+    [2, 1],
+    [3, 1],
+    [1, 3],
+    [2, 3],
+  ],
+  right: [
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [1, 1],
+    [3, 1],
+    [0, 2],
+    [2, 2],
+    [3, 2],
+    [1, 3],
+    [2, 3],
+  ],
+}
+
+BodyFood.left = BodyFood.up
+BodyFood.down = BodyFood.right
 
 export const BodyFoodCorner: FigureMapCorner = {
   up: {
@@ -259,36 +290,6 @@ BodyFoodCorner.left = {
   up: BodyFoodCorner.down.right,
   down: BodyFoodCorner.up.right,
 }
-
-export const BodyFood: Partial<FigureMapDir> = {
-  up: [
-    [1, 0],
-    [2, 0],
-    [0, 2],
-    [1, 2],
-    [3, 2],
-    [0, 1],
-    [2, 1],
-    [3, 1],
-    [1, 3],
-    [2, 3],
-  ],
-  right: [
-    [1, 0],
-    [2, 0],
-    [0, 1],
-    [1, 1],
-    [3, 1],
-    [0, 2],
-    [2, 2],
-    [3, 2],
-    [1, 3],
-    [2, 3],
-  ],
-}
-
-BodyFood.left = BodyFood.up
-BodyFood.down = BodyFood.right
 
 export const Food: FigureMapFood = {
   regular: [
