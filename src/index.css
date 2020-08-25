@@ -1,0 +1,15 @@
+:root {
+  --body-bg-color: #ccc;
+  --board-bg-color: #8ea792;
+  --front-color: #060e0c;
+  --viper-1-color: #2240c0;
+  --viper-2-color: #ba143e;
+  --viper-3-color: #ffb410;
+  --viper-4-color: #8c35ee;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
