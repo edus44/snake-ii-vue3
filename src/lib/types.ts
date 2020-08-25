@@ -4,6 +4,12 @@ export enum Dir {
   up = 'up',
   down = 'down',
 }
+export const ReverseDir: Record<Dir, Dir> = {
+  left: Dir.right,
+  right: Dir.left,
+  up: Dir.down,
+  down: Dir.up,
+}
 
 export type Bounds = {
   cols: number

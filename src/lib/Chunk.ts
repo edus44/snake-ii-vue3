@@ -1,15 +1,17 @@
-import { Figure, FigureMapDir } from './figures'
+import { Figure, FigureMap } from './figures'
 import { Dir, Position } from './types'
 
 export class Chunk {
   private dir: Dir
+  private outDir: Dir
   private position: Position
-  private figureMapDir: FigureMapDir
+  private figureMapDir: FigureMap
 
-  constructor(position: Position, figureMapDir: FigureMapDir, dir: Dir) {
+  constructor(position: Position, figureMapDir: FigureMap, dir: Dir) {
     this.position = { ...position }
     this.figureMapDir = figureMapDir
     this.dir = dir
+    this.outDir = dir
   }
 
   clone(): Chunk {
@@ -20,22 +22,18 @@ export class Chunk {
     return this.position
   }
 
-  setDir(dir: Dir): Chunk {
-    this.dir = dir
-    return this
-  }
-
   getDir(): Dir {
     return this.dir
   }
 
   getFigure(): Figure {
-    return this.figureMapDir[this.dir]
+    return this.figureMapDir[this.dir][this.outDir]
   }
 
-  setFigure(figureMapDir: FigureMapDir, dir?: Dir): Chunk {
+  setFigure(figureMapDir: FigureMap, dir?: Dir, outDir?: Dir): Chunk {
     this.figureMapDir = figureMapDir
     this.dir = dir || this.dir
+    this.outDir = outDir || this.dir
     return this
   }
 

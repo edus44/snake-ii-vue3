@@ -1,4 +1,4 @@
-import { Dir, Position } from './types'
+import { Dir, Position, ReverseDir } from './types'
 import { Chunk } from './Chunk'
 import * as figures from './figures'
 
@@ -16,7 +16,8 @@ export class Viper {
   }
 
   setDir(dir: Dir): Viper {
-    this.dir = dir
+    // TODO: Dir buffer
+    if (this.dir !== ReverseDir[dir]) this.dir = dir
     return this
   }
 
@@ -32,6 +33,10 @@ export class Viper {
     return this.chunks[this.chunks.length - 1]
   }
 
+  getPreTail(): Chunk {
+    return this.chunks[this.chunks.length - 2]
+  }
+
   grow() {
     const tail = this.getTail().setFigure(figures.Body)
     const newTail = tail.clone().move(-1).setFigure(figures.Tail)
@@ -39,10 +44,13 @@ export class Viper {
   }
 
   advance() {
-    const head = this.getHead().setFigure(figures.Body)
+    // Head
+    const head = this.getHead().setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
     this.chunks.unshift(newHead)
+
+    // Tail
     this.chunks.pop()
-    this.getTail().setFigure(figures.Tail)
+    this.getTail().setFigure(figures.Tail, this.getPreTail().getDir())
   }
 }

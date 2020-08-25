@@ -29,8 +29,8 @@ export default {
     onMounted(() => {
       board.value = new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 })
       viper.value = new Viper({ row: 0, col: 0 }, Dir.right)
-      viper.value.grow()
-      viper.value.grow()
+      // viper.value.grow()
+      // viper.value.grow()
       viper.value.advance()
       viper.value.setDir(Dir.down)
       viper.value.advance()
@@ -38,9 +38,10 @@ export default {
       board.value.drawChunks(viper.value.getChunks())
     })
 
-    // setInterval(() => {
-    // board.value.drawChunks(viper.value.getChunks())
-    // }, 100)
+    setInterval(() => {
+      viper.value.advance()
+      board.value.drawChunks(viper.value.getChunks())
+    }, 1000)
 
     const setDir = (dir: Dir) => viper.value.setDir(dir)
 
