@@ -41,7 +41,19 @@ export default {
     setInterval(() => {
       viper.value.advance()
       board.value.drawChunks(viper.value.getChunks())
-    }, 1000)
+    }, 100)
+
+    window.document.addEventListener('keydown', e => {
+      if (e.key == 'ArrowUp') {
+        viper.value.setDir(Dir.up)
+      } else if (e.key == 'ArrowLeft') {
+        viper.value.setDir(Dir.left)
+      } else if (e.key == 'ArrowDown') {
+        viper.value.setDir(Dir.down)
+      } else if (e.key == 'ArrowRight') {
+        viper.value.setDir(Dir.right)
+      }
+    })
 
     const setDir = (dir: Dir) => viper.value.setDir(dir)
 

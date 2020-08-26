@@ -4,6 +4,7 @@ import * as figures from './figures'
 
 export class Viper {
   private chunks: Chunk[] = []
+  private nextDirs: Dir[] = []
 
   constructor(private position: Position, private dir: Dir) {
     const head = new Chunk(position, figures.Head, dir)
@@ -12,12 +13,14 @@ export class Viper {
     this.chunks.push(head)
     this.chunks.push(tail)
 
-    for (let i = 0; i < 3; i++) this.grow()
+    for (let i = 0; i < 30; i++) this.grow()
   }
 
   setDir(dir: Dir): Viper {
-    // TODO: Dir buffer
-    if (this.dir !== ReverseDir[dir]) this.dir = dir
+    const prevDir = this.nextDirs[this.nextDirs.length - 1] || this.dir
+    if (this.nextDirs.length < 5 && dir !== ReverseDir[prevDir] && dir !== prevDir) {
+      this.nextDirs.push(dir)
+    }
     return this
   }
 
@@ -44,6 +47,8 @@ export class Viper {
   }
 
   advance() {
+    this.dir = this.nextDirs.shift() || this.dir
+
     // Head
     const head = this.getHead().setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
