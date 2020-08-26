@@ -1,17 +1,20 @@
 import { Board } from './Board'
 import { Viper } from './Viper'
-
+import { Store } from './Store'
 export class Game {
   private board: Board
+  private store: Store
   private vipers: Viper[] = []
-  private movesPerSecond = 10
-
-  setBoard(board: Board) {
-    this.board = board
+  constructor(private movesPerSecond = 10) {
+    this.store = new Store()
   }
 
-  addViper(viper: Viper) {
-    this.vipers.push(viper)
+  setBoard(...args: ConstructorParameters<typeof Board>) {
+    this.board = new Board(...args)
+  }
+
+  addViper(...args: ConstructorParameters<typeof Viper>) {
+    this.vipers.push(new Viper(...args))
   }
 
   tick(diff: number): boolean {
@@ -19,7 +22,10 @@ export class Game {
 
     this.vipers.forEach(x => x.advance())
 
-    const chunks = this.vipers.reduce((acc, x) => acc.concat(x.getChunks()), [])
+    const foods = this.store.getChunks()
+    const chunks = this.vipers.reduce((acc, x) => acc.concat(x.getChunks(foods)), [])
+
+    chunks.push(...foods)
     this.board.drawChunks(chunks)
 
     return true

@@ -27,7 +27,6 @@ export const useDirectionKeys = (fn: (dir: Dir) => void) => {
   document.addEventListener('keydown', handler)
 
   onBeforeUnmount(() => {
-    console.log('removed keydown')
     document.removeEventListener('keydown', handler)
   })
 }

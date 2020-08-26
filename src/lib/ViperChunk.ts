@@ -1,7 +1,7 @@
 import { Figure, FigureMap } from './figures'
-import { Dir, Position } from './types'
+import { Dir, Position, Chunk } from './types'
 
-export class Chunk {
+export class ViperChunk implements Chunk {
   private dir: Dir
   private outDir: Dir
   private position: Position
@@ -14,8 +14,8 @@ export class Chunk {
     this.outDir = dir
   }
 
-  clone(): Chunk {
-    return new Chunk(this.position, this.figureMapDir, this.dir)
+  clone(): ViperChunk {
+    return new ViperChunk(this.position, this.figureMapDir, this.dir)
   }
 
   getPosition(): Position {
@@ -30,14 +30,14 @@ export class Chunk {
     return this.figureMapDir[this.dir][this.outDir]
   }
 
-  setFigure(figureMapDir: FigureMap, dir?: Dir, outDir?: Dir): Chunk {
+  setFigure(figureMapDir: FigureMap, dir?: Dir, outDir?: Dir): ViperChunk {
     this.figureMapDir = figureMapDir
     this.dir = dir || this.dir
     this.outDir = outDir || this.dir
     return this
   }
 
-  move(step: 1 | -1): Chunk {
+  move(step: 1 | -1): ViperChunk {
     if (this.dir == Dir.right) this.position.col += step
     else if (this.dir == Dir.left) this.position.col -= step
     else if (this.dir == Dir.up) this.position.row -= step

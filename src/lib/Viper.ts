@@ -1,19 +1,19 @@
-import { Dir, Position, ReverseDir } from './types'
-import { Chunk } from './Chunk'
+import { Dir, Position, ReverseDir, Drawable, Chunk } from './types'
+import { ViperChunk } from './ViperChunk'
 import * as figures from './figures'
 
-export class Viper {
-  private chunks: Chunk[] = []
+export class Viper implements Drawable {
+  private chunks: ViperChunk[] = []
   private nextDirs: Dir[] = []
 
   constructor(private position: Position, private dir: Dir) {
-    const head = new Chunk(position, figures.Head, dir)
-    const tail = new Chunk(position, figures.Tail, dir).move(-1)
+    const head = new ViperChunk(position, figures.Head, dir)
+    const tail = new ViperChunk(position, figures.Tail, dir).move(-1)
 
     this.chunks.push(head)
     this.chunks.push(tail)
 
-    for (let i = 0; i < 50; i++) this.grow()
+    for (let i = 0; i < 4; i++) this.grow()
   }
 
   setDir(dir: Dir): Viper {
@@ -24,11 +24,18 @@ export class Viper {
     return this
   }
 
-  getChunks(): Chunk[] {
+  getChunks(foods: Chunk[]): Chunk[] {
+    const head = this.getChunk(0)
+    const ahead = head.clone().move(1).getPosition()
+    const foodAhead = foods.find(x => {
+      const pos = x.getPosition()
+      return pos.col == ahead.col && pos.row == ahead.row
+    })
+    head.setFigure(foodAhead ? figures.HeadMouth : figures.Head)
     return this.chunks
   }
 
-  getChunk(i: number) {
+  getChunk(i: number): ViperChunk {
     if (i < 0) i += this.chunks.length
     return this.chunks[i]
   }

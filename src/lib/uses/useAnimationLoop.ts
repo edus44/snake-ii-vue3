@@ -13,7 +13,6 @@ export const useAnimationLoop = (fn: (diff: number) => boolean) => {
   }
 
   onBeforeUnmount(() => {
-    console.log('unmounted')
     active = false
   })
 

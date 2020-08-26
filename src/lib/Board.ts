@@ -1,6 +1,5 @@
 import { Figure } from './figures'
-import { Chunk } from './Chunk'
-import { Bounds, Size, Position } from './types'
+import { Bounds, Size, Position, Chunk } from './types'
 
 export class Board {
   private readonly ctx: CanvasRenderingContext2D

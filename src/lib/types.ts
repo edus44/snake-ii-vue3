@@ -1,3 +1,5 @@
+import { Figure } from './figures'
+
 export enum Dir {
   left = 'left',
   right = 'right',
@@ -23,4 +25,13 @@ export type Size = {
 export type Position = {
   col: number
   row: number
+}
+
+export abstract class Chunk {
+  getPosition: () => Position
+  getFigure: () => Figure
+}
+
+export abstract class Drawable {
+  getChunks: (...args: any[]) => Chunk[]
 }
