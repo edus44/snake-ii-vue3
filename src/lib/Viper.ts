@@ -1,4 +1,4 @@
-import { Dir, Position, ReverseDir, Drawable, Chunk } from './types'
+import { Dir, Position, ReverseDir, Drawable, Chunk, Bounds } from './types'
 import { ViperChunk } from './ViperChunk'
 import * as figures from './figures'
 
@@ -6,9 +6,9 @@ export class Viper implements Drawable {
   private chunks: ViperChunk[] = []
   private nextDirs: Dir[] = []
 
-  constructor(private position: Position, private dir: Dir) {
-    const head = new ViperChunk(position, figures.Head, dir)
-    const tail = new ViperChunk(position, figures.Tail, dir).move(-1)
+  constructor(private readonly bounds: Bounds, position: Position, private dir: Dir) {
+    const head = new ViperChunk(bounds, position, figures.Head, dir)
+    const tail = new ViperChunk(bounds, position, figures.Tail, dir).move(-1)
 
     this.chunks.push(head)
     this.chunks.push(tail)

@@ -1,5 +1,5 @@
 import { Figure, FigureMap } from './figures'
-import { Dir, Position, Chunk } from './types'
+import { Dir, Position, Chunk, Bounds } from './types'
 
 export class ViperChunk implements Chunk {
   private dir: Dir
@@ -7,7 +7,12 @@ export class ViperChunk implements Chunk {
   private position: Position
   private figureMapDir: FigureMap
 
-  constructor(position: Position, figureMapDir: FigureMap, dir: Dir) {
+  constructor(
+    private readonly bounds: Bounds,
+    position: Position,
+    figureMapDir: FigureMap,
+    dir: Dir,
+  ) {
     this.position = { ...position }
     this.figureMapDir = figureMapDir
     this.dir = dir
@@ -15,7 +20,7 @@ export class ViperChunk implements Chunk {
   }
 
   clone(): ViperChunk {
-    return new ViperChunk(this.position, this.figureMapDir, this.dir)
+    return new ViperChunk(this.bounds, this.position, this.figureMapDir, this.dir)
   }
 
   getPosition(): Position {
@@ -42,6 +47,17 @@ export class ViperChunk implements Chunk {
     else if (this.dir == Dir.left) this.position.col -= step
     else if (this.dir == Dir.up) this.position.row -= step
     else if (this.dir == Dir.down) this.position.row += step
+
+    this.position = jail(this.position, this.bounds)
+
     return this
   }
+}
+
+function jail(position: Position, bounds: Bounds): Position {
+  let col = position.col % bounds.cols
+  let row = position.row % bounds.rows
+  if (col < 0) col += bounds.cols
+  if (row < 0) row += bounds.rows
+  return { row, col }
 }

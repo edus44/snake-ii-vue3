@@ -1,6 +1,7 @@
 import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
+import { Dir, Position } from './types'
 export class Game {
   private board: Board
   private store: Store
@@ -13,8 +14,8 @@ export class Game {
     this.board = new Board(...args)
   }
 
-  addViper(...args: ConstructorParameters<typeof Viper>) {
-    this.vipers.push(new Viper(...args))
+  addViper(position: Position, dir: Dir) {
+    this.vipers.push(new Viper(this.board.getBounds(), position, dir))
   }
 
   tick(diff: number): boolean {

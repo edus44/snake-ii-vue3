@@ -1,5 +1,5 @@
 import { Figure } from './figures'
-import { Bounds, Size, Position, Chunk } from './types'
+import { Bounds, Size, Position, Chunk, Drawable } from './types'
 
 export class Board {
   private readonly ctx: CanvasRenderingContext2D
@@ -20,6 +20,11 @@ export class Board {
     this.gapSize = this.pixelSize * 0.05
   }
 
+  getBounds() {
+    return this.bounds
+  }
+
+  // drawChunks(drawables: Drawable[]) {
   drawChunks(chunks: Chunk[]) {
     this.ctx.clearRect(0, 0, this.size.width, this.size.height)
     for (const chunk of chunks) {
@@ -27,18 +32,10 @@ export class Board {
     }
   }
 
-  jail(position: Position): Position {
-    let col = position.col % this.bounds.cols
-    let row = position.row % this.bounds.rows
-    if (col < 0) col += this.bounds.cols
-    if (row < 0) row += this.bounds.rows
-    return { row, col }
-  }
-
   draw(chunk: Chunk) {
     this.ctx.fillStyle = '#060e0c'
 
-    const { row, col } = this.jail(chunk.getPosition())
+    const { row, col } = chunk.getPosition()
     const figure = chunk.getFigure()
 
     const x = col * this.chunkSize
