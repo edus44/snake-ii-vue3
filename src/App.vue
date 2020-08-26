@@ -7,10 +7,11 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onDeactivated, onUnmounted, onBeforeMount } from 'vue'
 import * as figures from './lib/figures'
 import { Board } from './lib/Board'
 import { Viper } from './lib/Viper'
+import { Game } from './lib/Game'
 import { Dir } from './lib/types'
 
 const COLS = 3
@@ -21,37 +22,62 @@ const HEIGHT = 400
 
 const chunkSize = Math.min(WIDTH / COLS, HEIGHT / COLS)
 
+const useAnimationLoop = (fn: (diff: number) => boolean) => {
+  let active = true
+  let lastTs = Date.now()
+
+  const loop = () => {
+    if (!active) return
+    const ts = Date.now()
+    const diff = ts - lastTs
+    if (fn(diff)) lastTs = ts
+    requestAnimationFrame(loop)
+  }
+
+  onBeforeMount(() => {
+    active = false
+  })
+
+  requestAnimationFrame(loop)
+}
+
 export default {
   setup() {
     const canvas = ref<HTMLCanvasElement>()
     const board = ref<Board>()
     const viper = ref<Viper>()
+    const game = ref<Game>()
     onMounted(() => {
-      board.value = new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 })
-      viper.value = new Viper({ row: 0, col: 0 }, Dir.right)
-      // viper.value.grow()
-      // viper.value.grow()
-      viper.value.advance()
-      viper.value.setDir(Dir.down)
-      viper.value.advance()
-      viper.value.advance()
-      board.value.drawChunks(viper.value.getChunks())
-    })
+      game.value = new Game()
 
-    setInterval(() => {
-      viper.value.advance()
-      board.value.drawChunks(viper.value.getChunks())
-    }, 100)
+      game.value.setBoard(
+        new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 }),
+      )
+      game.value.addViper(new Viper({ row: 0, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 10, col: 10 }, Dir.up))
+
+      useAnimationLoop(diff => game.value.tick(diff))
+    })
 
     window.document.addEventListener('keydown', e => {
       if (e.key == 'ArrowUp') {
-        viper.value.setDir(Dir.up)
+        game.value.vipers[0].setDir(Dir.up)
       } else if (e.key == 'ArrowLeft') {
-        viper.value.setDir(Dir.left)
+        game.value.vipers[0].setDir(Dir.left)
       } else if (e.key == 'ArrowDown') {
-        viper.value.setDir(Dir.down)
+        game.value.vipers[0].setDir(Dir.down)
       } else if (e.key == 'ArrowRight') {
-        viper.value.setDir(Dir.right)
+        game.value.vipers[0].setDir(Dir.right)
+      }
+
+      if (e.key == 'w') {
+        game.value.vipers[1].setDir(Dir.up)
+      } else if (e.key == 'a') {
+        game.value.vipers[1].setDir(Dir.left)
+      } else if (e.key == 's') {
+        game.value.vipers[1].setDir(Dir.down)
+      } else if (e.key == 'd') {
+        game.value.vipers[1].setDir(Dir.right)
       }
     })
 

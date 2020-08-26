@@ -6,6 +6,7 @@ export class Board {
   private readonly ctx: CanvasRenderingContext2D
   private readonly chunkSize: number
   private readonly pixelSize: number
+  private readonly gapSize: number
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -17,6 +18,7 @@ export class Board {
     canvas.height = size.height
     this.chunkSize = Math.min(size.width / bounds.cols, size.height / bounds.rows)
     this.pixelSize = this.chunkSize / 4
+    this.gapSize = this.pixelSize * 0.05
   }
 
   drawChunks(chunks: Chunk[]) {
@@ -37,8 +39,6 @@ export class Board {
   draw(chunk: Chunk) {
     this.ctx.fillStyle = '#060e0c'
 
-    const gap = this.pixelSize * 0.05
-
     const { row, col } = this.jail(chunk.getPosition())
     const figure = chunk.getFigure()
 
@@ -47,10 +47,10 @@ export class Board {
 
     for (let i = 0; i < figure.length; i++) {
       this.ctx.fillRect(
-        x + figure[i][0] * this.pixelSize + gap,
-        y + figure[i][1] * this.pixelSize + gap,
-        this.pixelSize - gap,
-        this.pixelSize - gap,
+        x + figure[i][0] * this.pixelSize + this.gapSize,
+        y + figure[i][1] * this.pixelSize + this.gapSize,
+        this.pixelSize - this.gapSize,
+        this.pixelSize - this.gapSize,
       )
     }
   }
