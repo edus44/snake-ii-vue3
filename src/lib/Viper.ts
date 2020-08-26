@@ -28,20 +28,13 @@ export class Viper {
     return this.chunks
   }
 
-  getHead(): Chunk {
-    return this.chunks[0]
-  }
-
-  getTail(): Chunk {
-    return this.chunks[this.chunks.length - 1]
-  }
-
-  getPreTail(): Chunk {
-    return this.chunks[this.chunks.length - 2]
+  getChunk(i: number) {
+    if (i < 0) i += this.chunks.length
+    return this.chunks[i]
   }
 
   grow() {
-    const tail = this.getTail().setFigure(figures.Body)
+    const tail = this.getChunk(-1).setFigure(figures.Body)
     const newTail = tail.clone().move(-1).setFigure(figures.Tail)
     this.chunks.push(newTail)
   }
@@ -50,12 +43,13 @@ export class Viper {
     this.dir = this.nextDirs.shift() || this.dir
 
     // Head
-    const head = this.getHead().setFigure(figures.Body, null, this.dir)
+    const head = this.getChunk(0).setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
     this.chunks.unshift(newHead)
 
     // Tail
     this.chunks.pop()
-    this.getTail().setFigure(figures.Tail, this.getPreTail().getDir())
+    const preTailDir = this.getChunk(-2).getDir()
+    this.getChunk(-1).setFigure(figures.Tail, preTailDir)
   }
 }
