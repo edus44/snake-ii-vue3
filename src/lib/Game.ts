@@ -4,7 +4,7 @@ import { Viper } from './Viper'
 export class Game {
   private board: Board
   private vipers: Viper[] = []
-  private movesPerSecond = 10
+  private movesPerSecond = 25
 
   setBoard(board: Board) {
     this.board = board
