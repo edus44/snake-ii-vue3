@@ -1,9 +1,5 @@
 <template>
   <canvas ref="canvas" />
-  <button @click="setDir('up')">up</button>
-  <button @click="setDir('down')">down</button>
-  <button @click="setDir('left')">left</button>
-  <button @click="setDir('right')">right</button>
 </template>
 
 <script lang="ts">
@@ -16,38 +12,34 @@ import { Dir } from './lib/types'
 import { useAnimationLoop } from './lib/uses/useAnimationLoop'
 import { useDirectionKeys } from './lib/uses/useDirectionKeys'
 
-const COLS = 3
-const ROWS = 2
-
-const WIDTH = 300
-const HEIGHT = 400
-
-const chunkSize = Math.min(WIDTH / COLS, HEIGHT / COLS)
-
 export default {
   setup() {
     const canvas = ref<HTMLCanvasElement>()
-    const board = ref<Board>()
-
-    const viper = ref<Viper>()
     const game = ref<Game>()
+
     onMounted(() => {
-      game.value = new Game()
+      window.game = game.value = new Game()
 
       game.value.setBoard(
-        new Board(canvas.value, { cols: 20, rows: 20 }, { width: 600, height: 600 }),
+        new Board(canvas.value, { cols: 60, rows: 60 }, { width: 600, height: 600 }),
       )
       game.value.addViper(new Viper({ row: 0, col: 0 }, Dir.right))
-      // game.value.addViper(new Viper({ row: 10, col: 10 }, Dir.up))
+      // game.value.addViper(new Viper({ row: 1, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 2, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 3, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 4, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 5, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 6, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 7, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 8, col: 0 }, Dir.right))
+      // game.value.addViper(new Viper({ row: 9, col: 0 }, Dir.right))
 
       useAnimationLoop(diff => game.value.tick(diff))
 
       useDirectionKeys(dir => game.value.vipers[0].setDir(dir))
     })
 
-    const setDir = (dir: Dir) => viper.value.setDir(dir)
-
-    return { canvas, setDir }
+    return { canvas }
   },
 }
 </script>

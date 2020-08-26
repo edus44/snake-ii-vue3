@@ -13,7 +13,7 @@ export class Viper {
     this.chunks.push(head)
     this.chunks.push(tail)
 
-    for (let i = 0; i < 30; i++) this.grow()
+    for (let i = 0; i < 50; i++) this.grow()
   }
 
   setDir(dir: Dir): Viper {
