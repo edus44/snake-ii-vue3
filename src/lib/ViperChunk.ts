@@ -1,7 +1,7 @@
 import { Figure, FigureMap } from './figures'
-import { Dir, Position, Chunk, Bounds } from './types'
+import { Dir, Position, Chunk, Bounds, IChunk } from './types'
 
-export class ViperChunk implements Chunk {
+export class ViperChunk extends Chunk implements IChunk {
   private dir: Dir
   private outDir: Dir
   private position: Position
@@ -13,6 +13,7 @@ export class ViperChunk implements Chunk {
     figureMapDir: FigureMap,
     dir: Dir,
   ) {
+    super()
     this.position = { ...position }
     this.figureMapDir = figureMapDir
     this.dir = dir

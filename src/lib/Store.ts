@@ -1,7 +1,7 @@
-import { Chunk, Drawable } from './types'
+import { Chunk, Drawable, IChunk } from './types'
 import * as figures from './figures'
 
-export class Food implements Chunk {
+export class Food extends Chunk implements IChunk {
   getFigure() {
     return figures.Food.regular[0]
   }

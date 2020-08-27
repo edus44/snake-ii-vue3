@@ -32,10 +32,9 @@ export class Viper implements Drawable {
 
   getChunks(): Chunk[] {
     const head = this.getChunk(0)
-    const aheadPos = head.clone().move(1).getPosition()
+    const ahead = head.clone().move(1)
     const foodAhead = this.store.getChunks().find(x => {
-      const pos = x.getPosition()
-      return pos.col == aheadPos.col && pos.row == aheadPos.row
+      return x.comparePosition(ahead)
     })
     head.setFigure(foodAhead ? figures.HeadMouth : figures.Head)
     return this.chunks

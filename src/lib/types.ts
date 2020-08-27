@@ -27,9 +27,17 @@ export type Position = {
   row: number
 }
 
-export abstract class Chunk {
+export class IChunk {
   getPosition: () => Position
   getFigure: () => Figure
+}
+
+export class Chunk {
+  comparePosition(this: IChunk, chunk: IChunk) {
+    const posA = this.getPosition()
+    const posB = chunk.getPosition()
+    return posA.col == posB.col && posA.row == posB.row
+  }
 }
 
 export abstract class Drawable {
