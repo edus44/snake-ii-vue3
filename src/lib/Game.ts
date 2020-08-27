@@ -15,7 +15,8 @@ export class Game {
   }
 
   addViper(position: Position, dir: Dir) {
-    this.vipers.push(new Viper(this.board.getBounds(), position, dir))
+    const viper = new Viper(this.board.getBounds(), this.store, position, dir)
+    this.vipers.push(viper)
   }
 
   tick(diff: number): boolean {
@@ -23,11 +24,7 @@ export class Game {
 
     this.vipers.forEach(x => x.advance())
 
-    const foods = this.store.getChunks()
-    const chunks = this.vipers.reduce((acc, x) => acc.concat(x.getChunks(foods)), [])
-
-    chunks.push(...foods)
-    this.board.drawChunks(chunks)
+    this.board.draw([this.store, ...this.vipers])
 
     return true
   }

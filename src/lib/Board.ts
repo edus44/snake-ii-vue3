@@ -24,15 +24,17 @@ export class Board {
     return this.bounds
   }
 
-  // drawChunks(drawables: Drawable[]) {
-  drawChunks(chunks: Chunk[]) {
+  draw(drawables: Drawable[]) {
     this.ctx.clearRect(0, 0, this.size.width, this.size.height)
-    for (const chunk of chunks) {
-      this.draw(chunk)
+    for (const drawable of drawables) {
+      const chunks = drawable.getChunks()
+      for (const chunk of chunks) {
+        this.drawChunk(chunk)
+      }
     }
   }
 
-  draw(chunk: Chunk) {
+  drawChunk(chunk: Chunk) {
     this.ctx.fillStyle = '#060e0c'
 
     const { row, col } = chunk.getPosition()

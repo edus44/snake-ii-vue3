@@ -33,5 +33,5 @@ export abstract class Chunk {
 }
 
 export abstract class Drawable {
-  getChunks: (...args: any[]) => Chunk[]
+  getChunks: () => Chunk[]
 }
