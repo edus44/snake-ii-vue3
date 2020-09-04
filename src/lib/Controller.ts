@@ -1,9 +1,14 @@
-import { Size, Pos } from './types'
+import { Size, Pos, Dir } from './types'
+import { bound } from './utils'
 
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
   private readonly center: Pos
   private readonly boundsRect: DOMRect
+
+  private handlerPos: Pos
+  private handlerDir: Dir
+  private holding = false
 
   private outerRadius = 60
   private outerLineWidth = 3
@@ -25,33 +30,84 @@ export class Controller {
       x: size.width / 2,
       y: size.height / 2,
     }
-
+    this.resetHandler()
     this.bind()
     this.draw()
   }
 
   bind() {
-    this.canvas.addEventListener('mousedown', e => {
-      console.log('mousedown', this.getPos(e))
-    })
-    this.canvas.addEventListener('mousemove', e => {
-      console.log('mousemove', this.getPos(e))
-    })
-    this.canvas.addEventListener('mouseup', e => {
-      console.log('mouseup', this.getPos(e))
-    })
+    this.canvas.addEventListener('mousedown', this.start)
+    this.canvas.addEventListener('mousemove', this.move)
+    this.canvas.addEventListener('mouseup', this.end)
   }
 
-  getPos(e: MouseEvent): Pos {
-    return {
+  unbind() {
+    this.canvas.removeEventListener('mousedown', this.start)
+    this.canvas.removeEventListener('mousemove', this.move)
+    this.canvas.removeEventListener('mouseup', this.end)
+  }
+
+  @bound
+  private start(e: MouseEvent) {
+    this.holding = true
+    this.updateHandler(e)
+    requestAnimationFrame(this.draw)
+  }
+
+  @bound
+  private move(e: MouseEvent) {
+    if (!this.holding) return
+    this.updateHandler(e)
+    requestAnimationFrame(this.draw)
+  }
+
+  @bound
+  private end(e: MouseEvent) {
+    this.holding = false
+    this.resetHandler()
+    requestAnimationFrame(this.draw)
+  }
+
+  resetHandler() {
+    this.handlerPos = { x: 0, y: 0 }
+  }
+
+  updateHandler(e: MouseEvent) {
+    const coords: Pos = {
       x: e.pageX - this.boundsRect.left,
       y: e.pageY - this.boundsRect.top,
     }
+    let dX = (coords.x - this.center.x) / this.outerRadius
+    let dY = (coords.y - this.center.y) / this.outerRadius
+
+    //Distance to center
+    let mod = Math.sqrt(dX * dX + dY * dY)
+
+    //Off limits
+    if (mod > 1) {
+      //Angle
+      let angle = Math.atan(dY / dX)
+
+      //Intersect position
+      let limX = Math.cos(angle)
+      let limY = Math.sin(angle)
+
+      if (dX < 0) {
+        dX = -limX
+        dY = -limY
+      } else {
+        dX = limX
+        dY = limY
+      }
+    }
+
+    this.handlerPos = { x: dX, y: dY }
+    this.handlerDir = getDir(this.handlerPos)
   }
 
-  unbind() {}
+  @bound draw() {
+    this.ctx.clearRect(0, 0, this.size.width, this.size.height)
 
-  draw() {
     // Outer
     this.ctx.beginPath()
     this.ctx.arc(this.center.x, this.center.y, this.outerRadius, 0, 2 * Math.PI, false)
@@ -68,9 +124,22 @@ export class Controller {
     this.ctx.fill()
 
     // Handler
+    const handlerX = this.center.x + this.handlerPos.x * this.outerRadius
+    const handlerY = this.center.y + this.handlerPos.y * this.outerRadius
     this.ctx.beginPath()
-    this.ctx.arc(this.center.x, this.center.y, this.handlerRadius, 0, 2 * Math.PI, false)
+    this.ctx.arc(handlerX, handlerY, this.handlerRadius, 0, 2 * Math.PI, false)
     this.ctx.fillStyle = this.handlerColor
     this.ctx.fill()
+  }
+}
+
+function getDir({ x, y }: Pos): Dir {
+  let deadZone = 0.2
+  if (Math.abs(x) > Math.abs(y)) {
+    if (x > deadZone) return Dir.right
+    else if (x < -deadZone) return Dir.left
+  } else {
+    if (y > deadZone) return Dir.down
+    else if (y < -deadZone) return Dir.up
   }
 }

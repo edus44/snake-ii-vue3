@@ -8,6 +8,7 @@ import { Game } from '../lib/Game'
 import { Color, Dir } from '../lib/types'
 import { useSpaceKey } from '../lib/uses/useSpaceKey'
 import { useDirectionKeys } from '../lib/uses/useDirectionKeys'
+import { useAnimationLoop } from '../lib/uses/useAnimationLoop'
 
 export default {
   setup() {
@@ -22,10 +23,10 @@ export default {
       game.addViper({ row: 8, col: 0 }, Dir.right, Color.red)
       game.addViper({ row: 10, col: 0 }, Dir.right, Color.yellow)
 
-      // useAnimationLoop(diff => game.tick(diff))
       useSpaceKey(() => game.tick(10000))
+      // useAnimationLoop(game.tick)
 
-      useDirectionKeys((idx, dir) => game.turnViper(idx, dir))
+      useDirectionKeys(game.turnViper)
     })
 
     return { canvas }

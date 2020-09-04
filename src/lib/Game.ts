@@ -2,7 +2,7 @@ import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
 import { Dir, Position, Color } from './types'
-import { shuffle } from './utils'
+import { shuffle, bound } from './utils'
 
 export class Game {
   private board: Board
@@ -20,11 +20,11 @@ export class Game {
     this.vipers.push(viper)
   }
 
-  turnViper(viperIdx: number, dir: Dir) {
+  @bound turnViper(viperIdx: number, dir: Dir) {
     this.vipers[viperIdx]?.setDir(dir)
   }
 
-  tick(diff: number): boolean {
+  @bound tick(diff: number): boolean {
     if (diff < 1000 / this.movesPerSecond) return false
 
     this.getVipersSorted().forEach(x => x.advance(this.store, this.vipers))
