@@ -33,6 +33,11 @@ export class ViperChunk extends Chunk {
     return this.dir
   }
 
+  setDir(dir: Dir): ViperChunk {
+    this.dir = dir
+    return this
+  }
+
   getFigure(): Figure {
     return this.figureMapDir[this.dir][this.outDir]
   }

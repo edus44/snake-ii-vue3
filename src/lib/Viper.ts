@@ -8,6 +8,7 @@ import { Drawable } from './Drawable'
 export class Viper extends Drawable {
   private chunks: ViperChunk[] = []
   private nextDirs: Dir[] = []
+  private minLength = 2
 
   constructor(
     private readonly bounds: Bounds,
@@ -22,7 +23,7 @@ export class Viper extends Drawable {
     this.chunks.push(head)
     this.chunks.push(tail)
 
-    for (let i = 0; i < 4; i++) this.grow()
+    for (let i = 0; i < 5; i++) this.grow()
   }
 
   setDir(dir: Dir): Viper {
@@ -36,9 +37,7 @@ export class Viper extends Drawable {
   getChunks(): Chunk[] {
     const head = this.getChunk(0)
     const ahead = head.clone().move(1)
-    const foodAhead = this.store.getChunks().find(x => {
-      return x.comparePosition(ahead)
-    })
+    const foodAhead = this.store.intersects(ahead)
     head.setFigure(foodAhead ? figures.HeadMouth : figures.Head)
     return this.chunks
   }
@@ -57,12 +56,28 @@ export class Viper extends Drawable {
   advance() {
     this.dir = this.nextDirs.shift() || this.dir
 
-    // Head
-    const head = this.getChunk(0).setFigure(figures.Body, null, this.dir)
+    if (!this.isCrashing()) {
+      this.advanceHead()
+    }
+    this.advanceTail()
+  }
+
+  private isCrashing() {
+    const ahead = this.getChunk(0).clone().setDir(this.dir).move(1)
+    const crashedChunk = this.intersects(ahead) || this.store.intersects(ahead)
+    const canShrink = this.chunks.length > this.minLength
+    const isItsTail = crashedChunk === this.getChunk(-1)
+    return crashedChunk && !isItsTail && canShrink
+  }
+
+  private advanceHead() {
+    const head = this.getChunk(0)
+    head.setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
     this.chunks.unshift(newHead)
+  }
 
-    // Tail
+  private advanceTail() {
     this.chunks.pop()
     const preTailDir = this.getChunk(-2).getDir()
     this.getChunk(-1).setFigure(figures.Tail, preTailDir)
