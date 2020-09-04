@@ -1,5 +1,3 @@
-import { Figure } from './figures'
-
 export enum Dir {
   left = 'left',
   right = 'right',
@@ -25,21 +23,4 @@ export type Size = {
 export type Position = {
   col: number
   row: number
-}
-
-export class IChunk {
-  getPosition: () => Position
-  getFigure: () => Figure
-}
-
-export class Chunk {
-  comparePosition(this: IChunk, chunk: IChunk) {
-    const posA = this.getPosition()
-    const posB = chunk.getPosition()
-    return posA.col == posB.col && posA.row == posB.row
-  }
-}
-
-export abstract class Drawable {
-  getChunks: () => Chunk[]
 }

@@ -1,7 +1,8 @@
-import { Chunk, Drawable, IChunk } from './types'
 import * as figures from './figures'
+import { Chunk } from './Chunk'
+import { Drawable } from './Drawable'
 
-export class Food extends Chunk implements IChunk {
+export class Food extends Chunk {
   getFigure() {
     return figures.Food.regular[0]
   }
@@ -13,9 +14,10 @@ export class Food extends Chunk implements IChunk {
   }
 }
 
-export class Store implements Drawable {
+export class Store extends Drawable {
   private foods: Food[]
   constructor() {
+    super()
     this.foods = [new Food()]
   }
   getChunks() {

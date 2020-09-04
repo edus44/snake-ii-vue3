@@ -1,7 +1,8 @@
 import { Figure, FigureMap } from './figures'
-import { Dir, Position, Chunk, Bounds, IChunk } from './types'
+import { Dir, Position, Bounds } from './types'
+import { Chunk } from './Chunk'
 
-export class ViperChunk extends Chunk implements IChunk {
+export class ViperChunk extends Chunk {
   private dir: Dir
   private outDir: Dir
   private position: Position

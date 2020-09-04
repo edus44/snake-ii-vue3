@@ -1,9 +1,11 @@
-import { Dir, Position, ReverseDir, Drawable, Chunk, Bounds } from './types'
+import { Dir, Position, ReverseDir, Bounds } from './types'
 import { ViperChunk } from './ViperChunk'
 import * as figures from './figures'
 import { Store } from './Store'
+import { Chunk } from './Chunk'
+import { Drawable } from './Drawable'
 
-export class Viper implements Drawable {
+export class Viper extends Drawable {
   private chunks: ViperChunk[] = []
   private nextDirs: Dir[] = []
 
@@ -13,6 +15,7 @@ export class Viper implements Drawable {
     position: Position,
     private dir: Dir,
   ) {
+    super()
     const head = new ViperChunk(bounds, position, figures.Head, dir)
     const tail = new ViperChunk(bounds, position, figures.Tail, dir).move(-1)
 
