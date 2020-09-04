@@ -55,18 +55,23 @@ export class Viper extends Drawable {
 
   advance() {
     this.dir = this.nextDirs.shift() || this.dir
-
-    if (!this.isCrashing()) {
+    const isCrashing = this.isCrashing()
+    if (!isCrashing) {
       this.advanceHead()
     }
     this.advanceTail()
 
     this.updateHeadFigure()
+    this.updateChunkAlert(isCrashing)
   }
 
   private updateHeadFigure() {
     const hasFoodAhead = this.store.intersects(this.getAhead())
     this.getChunk(0).setFigure(hasFoodAhead ? figures.HeadMouth : figures.Head)
+  }
+
+  private updateChunkAlert(isCrashing: boolean) {
+    this.chunks.forEach(x => x.setAlert(isCrashing))
   }
 
   private isCrashing() {

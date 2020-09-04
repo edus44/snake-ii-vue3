@@ -12,6 +12,9 @@ export class Food extends Chunk {
       row: 5,
     }
   }
+  getColor() {
+    return '#060e0c'
+  }
 }
 
 export class Store extends Drawable {

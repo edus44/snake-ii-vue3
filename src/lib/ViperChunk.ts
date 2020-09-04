@@ -7,6 +7,7 @@ export class ViperChunk extends Chunk {
   private outDir: Dir
   private position: Position
   private figureMapDir: FigureMap
+  private alert: boolean
 
   constructor(
     private readonly bounds: Bounds,
@@ -31,6 +32,15 @@ export class ViperChunk extends Chunk {
 
   getDir(): Dir {
     return this.dir
+  }
+
+  getColor(): string {
+    return this.alert ? 'rgb(34 64 192 / 50%)' : 'rgb(34 64 192 / 100%)'
+  }
+
+  setAlert(alert: boolean): Chunk {
+    this.alert = alert
+    return this
   }
 
   setDir(dir: Dir): ViperChunk {

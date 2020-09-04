@@ -37,7 +37,7 @@ export class Board {
   }
 
   drawChunk(chunk: Chunk) {
-    this.ctx.fillStyle = '#060e0c'
+    this.ctx.fillStyle = chunk.getColor()
 
     const { row, col } = chunk.getPosition()
     const figure = chunk.getFigure()

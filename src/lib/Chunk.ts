@@ -4,6 +4,7 @@ import { Position } from './types'
 export abstract class Chunk {
   abstract getPosition(): Position
   abstract getFigure(): Figure
+  abstract getColor(): string
   comparePosition(chunk: Chunk) {
     const posA = this.getPosition()
     const posB = chunk.getPosition()
