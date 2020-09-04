@@ -1,27 +1,33 @@
 import { onBeforeUnmount } from 'vue'
 import { Dir } from '../types'
 
-export const useDirectionKeys = (fn: (dir: Dir) => void) => {
+export const useDirectionKeys = (fn: (idx: number, dir: Dir) => void) => {
   const handler = e => {
     if (e.key == 'ArrowUp') {
-      fn(Dir.up)
+      fn(0, Dir.up)
     } else if (e.key == 'ArrowLeft') {
-      fn(Dir.left)
+      fn(0, Dir.left)
     } else if (e.key == 'ArrowDown') {
-      fn(Dir.down)
+      fn(0, Dir.down)
     } else if (e.key == 'ArrowRight') {
-      fn(Dir.right)
+      fn(0, Dir.right)
+    } else if (e.key == 'w') {
+      fn(1, Dir.up)
+    } else if (e.key == 'a') {
+      fn(1, Dir.left)
+    } else if (e.key == 's') {
+      fn(1, Dir.down)
+    } else if (e.key == 'd') {
+      fn(1, Dir.right)
+    } else if (e.key == 'i') {
+      fn(2, Dir.up)
+    } else if (e.key == 'j') {
+      fn(2, Dir.left)
+    } else if (e.key == 'k') {
+      fn(2, Dir.down)
+    } else if (e.key == 'l') {
+      fn(2, Dir.right)
     }
-
-    // if (e.key == 'w') {
-    //   game.value.vipers[1].setDir(Dir.up)
-    // } else if (e.key == 'a') {
-    //   game.value.vipers[1].setDir(Dir.left)
-    // } else if (e.key == 's') {
-    //   game.value.vipers[1].setDir(Dir.down)
-    // } else if (e.key == 'd') {
-    //   game.value.vipers[1].setDir(Dir.right)
-    // }
   }
 
   document.addEventListener('keydown', handler)

@@ -11,6 +11,14 @@ export const ReverseDir: Record<Dir, Dir> = {
   down: Dir.up,
 }
 
+export enum Color {
+  black = '#060e0c',
+  blue = 'rgb(34 64 192)',
+  red = 'rgb(186 20 62)',
+  yellow = 'rgb(255 180 16)',
+  purple = 'rgb(140 53 238)',
+}
+
 export type Bounds = {
   cols: number
   rows: number

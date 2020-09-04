@@ -1,26 +1,28 @@
 import { Figure, FigureMap } from './figures'
-import { Dir, Position, Bounds } from './types'
+import { Dir, Position, Bounds, Color } from './types'
 import { Chunk } from './Chunk'
 import * as figures from './figures'
 
 export class ViperChunk extends Chunk {
-  private dir: Dir
   private outDir: Dir
   private position: Position
-  private figureMap: FigureMap
   private faded: boolean
   private digesting: boolean
 
-  constructor(private readonly bounds: Bounds, position: Position, figureMap: FigureMap, dir: Dir) {
+  constructor(
+    private readonly bounds: Bounds,
+    position: Position,
+    private figureMap: FigureMap,
+    private dir: Dir,
+    private readonly color: Color,
+  ) {
     super()
     this.position = { ...position }
-    this.figureMap = figureMap
-    this.dir = dir
     this.outDir = dir
   }
 
   clone(): ViperChunk {
-    return new ViperChunk(this.bounds, this.position, this.figureMap, this.dir)
+    return new ViperChunk(this.bounds, this.position, this.figureMap, this.dir, this.color)
   }
 
   getPosition(): Position {
@@ -32,7 +34,7 @@ export class ViperChunk extends Chunk {
   }
 
   getColor(): string {
-    return this.faded ? 'rgb(34 64 192 / 50%)' : 'rgb(34 64 192 / 100%)'
+    return this.faded ? this.color.replace(')', ' / 50%)') : this.color
   }
 
   setFaded(faded: boolean): Chunk {

@@ -1,8 +1,7 @@
-import { Dir, Position, ReverseDir, Bounds } from './types'
+import { Dir, Position, ReverseDir, Bounds, Color } from './types'
 import { ViperChunk } from './ViperChunk'
 import * as figures from './figures'
 import { Store } from './Store'
-import { Chunk } from './Chunk'
 import { Drawable } from './Drawable'
 
 export class Viper extends Drawable<ViperChunk> {
@@ -15,13 +14,13 @@ export class Viper extends Drawable<ViperChunk> {
     private readonly store: Store,
     position: Position,
     private dir: Dir,
+    private readonly color: Color,
   ) {
     super()
-    const head = new ViperChunk(bounds, position, figures.Head, dir)
-    const tail = new ViperChunk(bounds, position, figures.Tail, dir).move(-1)
+    const head = new ViperChunk(bounds, position, figures.Head, dir, this.color)
+    const tail = head.clone().setFigure(figures.Tail).move(-1)
 
-    this.chunks.push(head)
-    this.chunks.push(tail)
+    this.chunks.push(head, tail)
 
     for (let i = 0; i < 5; i++) this.grow()
   }
@@ -83,6 +82,7 @@ export class Viper extends Drawable<ViperChunk> {
   }
 
   private advanceHead() {
+    // Move head one position to current dir
     const head = this.getChunk(0)
     head.setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)

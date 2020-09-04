@@ -9,7 +9,7 @@ import { Board } from './lib/Board'
 import { Viper } from './lib/Viper'
 import { Game } from './lib/Game'
 import { Store } from './lib/Store'
-import { Dir } from './lib/types'
+import { Color, Dir } from './lib/types'
 import { useAnimationLoop } from './lib/uses/useAnimationLoop'
 import { useDirectionKeys } from './lib/uses/useDirectionKeys'
 import { useSpaceKey } from './lib/uses/useSpaceKey'
@@ -21,14 +21,16 @@ export default {
 
     onMounted(() => {
       const game = new Game(canvas.value, { cols: 20, rows: 13 }, { width: 600, height: 400 })
-      window.game = game
+      window['game'] = game
 
-      game.addViper({ row: 5, col: 0 }, Dir.right)
+      game.addViper({ row: 5, col: 0 }, Dir.right, Color.blue)
+      game.addViper({ row: 8, col: 0 }, Dir.right, Color.red)
+      game.addViper({ row: 10, col: 0 }, Dir.right, Color.yellow)
 
-      // useAnimationLoop(diff => game.tick(diff))
-      useSpaceKey(() => game.tick(10000))
+      useAnimationLoop(diff => game.tick(diff))
+      // useSpaceKey(() => game.tick(10000))
 
-      useDirectionKeys(dir => game.vipers[0].setDir(dir))
+      useDirectionKeys((idx, dir) => game.turnViper(idx, dir))
     })
 
     return { canvas }

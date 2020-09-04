@@ -1,7 +1,8 @@
 import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
-import { Dir, Position } from './types'
+import { Dir, Position, Color } from './types'
+
 export class Game {
   private board: Board
   private store: Store
@@ -13,9 +14,13 @@ export class Game {
     this.store = new Store(this.board.getBounds())
   }
 
-  addViper(position: Position, dir: Dir) {
-    const viper = new Viper(this.board.getBounds(), this.store, position, dir)
+  addViper(position: Position, dir: Dir, color: Color) {
+    const viper = new Viper(this.board.getBounds(), this.store, position, dir, color)
     this.vipers.push(viper)
+  }
+
+  turnViper(viperIdx: number, dir: Dir) {
+    this.vipers[viperIdx]?.setDir(dir)
   }
 
   tick(diff: number): boolean {
