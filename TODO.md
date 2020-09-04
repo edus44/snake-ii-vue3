@@ -1,7 +1,5 @@
 - ? Check if random food position collisions
-- ? Advance, resolve and shrink VS random advance+resolve
 - Eat bugs
-- Crash with other vipers
 - Print each viper length
 - Selectable num players (2,3,4)
 - Show controllers for each player
