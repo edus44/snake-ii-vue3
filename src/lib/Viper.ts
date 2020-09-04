@@ -5,7 +5,7 @@ import { Store } from './Store'
 import { Chunk } from './Chunk'
 import { Drawable } from './Drawable'
 
-export class Viper extends Drawable {
+export class Viper extends Drawable<ViperChunk> {
   private chunks: ViperChunk[] = []
   private nextDirs: Dir[] = []
   private minLength = 2
@@ -34,7 +34,7 @@ export class Viper extends Drawable {
     return this
   }
 
-  getChunks(): Chunk[] {
+  getChunks() {
     return this.chunks
   }
 
@@ -87,6 +87,12 @@ export class Viper extends Drawable {
     head.setFigure(figures.Body, null, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
     this.chunks.unshift(newHead)
+
+    // Eat
+    if (this.store.eat(newHead)) {
+      this.grow()
+      newHead.setDigesting(true)
+    }
   }
 
   private advanceTail() {

@@ -1,29 +1,26 @@
 import { Figure, FigureMap } from './figures'
 import { Dir, Position, Bounds } from './types'
 import { Chunk } from './Chunk'
+import * as figures from './figures'
 
 export class ViperChunk extends Chunk {
   private dir: Dir
   private outDir: Dir
   private position: Position
-  private figureMapDir: FigureMap
+  private figureMap: FigureMap
   private faded: boolean
+  private digesting: boolean
 
-  constructor(
-    private readonly bounds: Bounds,
-    position: Position,
-    figureMapDir: FigureMap,
-    dir: Dir,
-  ) {
+  constructor(private readonly bounds: Bounds, position: Position, figureMap: FigureMap, dir: Dir) {
     super()
     this.position = { ...position }
-    this.figureMapDir = figureMapDir
+    this.figureMap = figureMap
     this.dir = dir
     this.outDir = dir
   }
 
   clone(): ViperChunk {
-    return new ViperChunk(this.bounds, this.position, this.figureMapDir, this.dir)
+    return new ViperChunk(this.bounds, this.position, this.figureMap, this.dir)
   }
 
   getPosition(): Position {
@@ -43,17 +40,24 @@ export class ViperChunk extends Chunk {
     return this
   }
 
+  setDigesting(digesting: boolean): Chunk {
+    this.digesting = digesting
+    return this
+  }
+
   setDir(dir: Dir): ViperChunk {
     this.dir = dir
     return this
   }
 
   getFigure(): Figure {
-    return this.figureMapDir[this.dir][this.outDir]
+    if (this.digesting && this.figureMap === figures.Body)
+      return figures.BodyDigesting[this.dir][this.outDir]
+    return this.figureMap[this.dir][this.outDir]
   }
 
-  setFigure(figureMapDir: FigureMap, dir?: Dir, outDir?: Dir): ViperChunk {
-    this.figureMapDir = figureMapDir
+  setFigure(figureMap: FigureMap, dir?: Dir, outDir?: Dir): ViperChunk {
+    this.figureMap = figureMap
     this.dir = dir || this.dir
     this.outDir = outDir || this.dir
     return this

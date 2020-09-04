@@ -6,12 +6,11 @@ export class Game {
   private board: Board
   private store: Store
   private vipers: Viper[] = []
-  constructor(private movesPerSecond = 10) {
-    this.store = new Store()
-  }
-
-  setBoard(...args: ConstructorParameters<typeof Board>) {
+  private movesPerSecond = 10
+  private tickNumber = 0
+  constructor(...args: ConstructorParameters<typeof Board>) {
     this.board = new Board(...args)
+    this.store = new Store(this.board.getBounds())
   }
 
   addViper(position: Position, dir: Dir) {
@@ -26,6 +25,7 @@ export class Game {
 
     this.board.draw([this.store, ...this.vipers])
 
+    this.tickNumber++
     return true
   }
 }
