@@ -1,5 +1,6 @@
 import { Size, Pos, Dir } from './types'
 import { bound } from './utils'
+import { ref } from 'vue'
 
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
@@ -7,7 +8,7 @@ export class Controller {
   private readonly boundsRect: DOMRect
 
   private handlerPos: Pos
-  private handlerDir: Dir
+  private handlerDir = ref<Dir>()
   private holding = false
 
   private outerRadius = 60
@@ -102,7 +103,7 @@ export class Controller {
     }
 
     this.handlerPos = { x: dX, y: dY }
-    this.handlerDir = getDir(this.handlerPos)
+    this.handlerDir.value = getDir(this.handlerPos)
   }
 
   @bound draw() {

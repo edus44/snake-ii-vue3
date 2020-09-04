@@ -16,20 +16,20 @@ export default {
     const game = ref<Game>()
 
     onMounted(() => {
-      const game = new Game(canvas.value, { cols: 20, rows: 13 }, { width: 600, height: 400 })
-      window['game'] = game
+      const g = new Game(canvas.value, { cols: 20, rows: 13 }, { width: 600, height: 400 })
+      game.value = window['game'] = g
 
-      game.addViper({ row: 5, col: 0 }, Dir.right, Color.blue)
-      game.addViper({ row: 8, col: 0 }, Dir.right, Color.red)
-      game.addViper({ row: 10, col: 0 }, Dir.right, Color.yellow)
+      g.addViper({ row: 5, col: 0 }, Dir.right, Color.blue)
+      g.addViper({ row: 8, col: 0 }, Dir.right, Color.red)
+      g.addViper({ row: 10, col: 0 }, Dir.right, Color.yellow)
 
-      useSpaceKey(() => game.tick(10000))
-      // useAnimationLoop(game.tick)
+      // useSpaceKey(() => g.tick(10000))
+      useAnimationLoop(g.tick)
 
-      useDirectionKeys(game.turnViper)
+      useDirectionKeys(g.turnViper)
     })
 
-    return { canvas }
+    return { canvas, game }
   },
 }
 </script>

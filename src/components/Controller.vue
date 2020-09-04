@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue'
 import { Controller } from '../lib/Controller'
 
 export default {
-  setup() {
+  setup(_, { emit }) {
     const canvas = ref<HTMLCanvasElement>()
     const controller = ref<Controller>()
 
@@ -15,6 +15,10 @@ export default {
       controller.value = new Controller(canvas.value, {
         width: 300,
         height: 200,
+      })
+      watchEffect(() => {
+        console.log(controller.value.handlerDir)
+        emit('dir', controller.value.handlerDir)
       })
     })
 
