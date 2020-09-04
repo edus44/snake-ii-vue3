@@ -2,12 +2,13 @@ import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
 import { Dir, Position, Color } from './types'
+import { shuffle } from './utils'
 
 export class Game {
   private board: Board
   private store: Store
   private vipers: Viper[] = []
-  private movesPerSecond = 10
+  private movesPerSecond = 4
   private tickNumber = 0
   constructor(...args: ConstructorParameters<typeof Board>) {
     this.board = new Board(...args)
@@ -15,7 +16,7 @@ export class Game {
   }
 
   addViper(position: Position, dir: Dir, color: Color) {
-    const viper = new Viper(this.board.getBounds(), this.store, position, dir, color)
+    const viper = new Viper(this.board.getBounds(), position, dir, color)
     this.vipers.push(viper)
   }
 
@@ -26,7 +27,7 @@ export class Game {
   tick(diff: number): boolean {
     if (diff < 1000 / this.movesPerSecond) return false
 
-    this.vipers.forEach(x => x.advance())
+    shuffle(this.vipers).forEach(x => x.advance(this.store, this.vipers))
 
     this.board.draw([this.store, ...this.vipers])
 

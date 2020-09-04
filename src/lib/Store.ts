@@ -2,6 +2,7 @@ import * as figures from './figures'
 import { Chunk } from './Chunk'
 import { Drawable } from './Drawable'
 import { Bounds, Position } from './types'
+import { rnd } from './utils'
 
 export class Food extends Chunk {
   constructor(
@@ -76,5 +77,3 @@ export class Store extends Drawable<Food> {
     return true
   }
 }
-
-const rnd = (n: number) => (Math.random() * n) | 0

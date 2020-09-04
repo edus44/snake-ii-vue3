@@ -27,8 +27,8 @@ export default {
       game.addViper({ row: 8, col: 0 }, Dir.right, Color.red)
       game.addViper({ row: 10, col: 0 }, Dir.right, Color.yellow)
 
-      useAnimationLoop(diff => game.tick(diff))
-      // useSpaceKey(() => game.tick(10000))
+      // useAnimationLoop(diff => game.tick(diff))
+      useSpaceKey(() => game.tick(10000))
 
       useDirectionKeys((idx, dir) => game.turnViper(idx, dir))
     })
