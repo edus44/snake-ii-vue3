@@ -35,16 +35,16 @@ export class Viper extends Drawable {
   }
 
   getChunks(): Chunk[] {
-    const head = this.getChunk(0)
-    const ahead = head.clone().move(1)
-    const foodAhead = this.store.intersects(ahead)
-    head.setFigure(foodAhead ? figures.HeadMouth : figures.Head)
     return this.chunks
   }
 
   getChunk(i: number): ViperChunk {
     if (i < 0) i += this.chunks.length
     return this.chunks[i]
+  }
+
+  getAhead() {
+    return this.getChunk(0).clone().setDir(this.dir).move(1)
   }
 
   grow() {
@@ -60,14 +60,21 @@ export class Viper extends Drawable {
       this.advanceHead()
     }
     this.advanceTail()
+
+    this.updateHeadFigure()
+  }
+
+  private updateHeadFigure() {
+    const hasFoodAhead = this.store.intersects(this.getAhead())
+    this.getChunk(0).setFigure(hasFoodAhead ? figures.HeadMouth : figures.Head)
   }
 
   private isCrashing() {
-    const ahead = this.getChunk(0).clone().setDir(this.dir).move(1)
-    const crashedChunk = this.intersects(ahead) || this.store.intersects(ahead)
+    //TODO: Check other vipers
+    const crashedChunk = this.intersects(this.getAhead())
     const canShrink = this.chunks.length > this.minLength
-    const isItsTail = crashedChunk === this.getChunk(-1)
-    return crashedChunk && !isItsTail && canShrink
+    const isSelfTail = crashedChunk === this.getChunk(-1)
+    return crashedChunk && !isSelfTail && canShrink
   }
 
   private advanceHead() {
