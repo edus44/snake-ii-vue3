@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { Controller } from '../lib/Controller'
 
 export default {
@@ -16,6 +16,10 @@ export default {
         width: 300,
         height: 200,
       })
+    })
+
+    onBeforeUnmount(() => {
+      controller.value.unbind()
     })
 
     return { canvas }

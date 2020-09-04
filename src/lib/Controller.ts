@@ -3,6 +3,7 @@ import { Size, Pos } from './types'
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
   private readonly center: Pos
+  private readonly boundsRect: DOMRect
 
   private outerRadius = 60
   private outerLineWidth = 3
@@ -17,12 +18,38 @@ export class Controller {
     this.ctx = canvas.getContext('2d')
     canvas.width = size.width
     canvas.height = size.height
+
+    this.boundsRect = canvas.getBoundingClientRect()
+
     this.center = {
       x: size.width / 2,
       y: size.height / 2,
     }
+
+    this.bind()
     this.draw()
   }
+
+  bind() {
+    this.canvas.addEventListener('mousedown', e => {
+      console.log('mousedown', this.getPos(e))
+    })
+    this.canvas.addEventListener('mousemove', e => {
+      console.log('mousemove', this.getPos(e))
+    })
+    this.canvas.addEventListener('mouseup', e => {
+      console.log('mouseup', this.getPos(e))
+    })
+  }
+
+  getPos(e: MouseEvent): Pos {
+    return {
+      x: e.pageX - this.boundsRect.left,
+      y: e.pageY - this.boundsRect.top,
+    }
+  }
+
+  unbind() {}
 
   draw() {
     // Outer
