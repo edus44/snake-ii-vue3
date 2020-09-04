@@ -27,11 +27,20 @@ export class Game {
   tick(diff: number): boolean {
     if (diff < 1000 / this.movesPerSecond) return false
 
-    shuffle(this.vipers).forEach(x => x.advance(this.store, this.vipers))
+    this.getVipersSorted().forEach(x => x.advance(this.store, this.vipers))
 
     this.board.draw([this.store, ...this.vipers])
 
     this.tickNumber++
     return true
+  }
+
+  private getVipersSorted() {
+    // Sort vipers by length and random if same
+    return this.vipers.slice(0).sort((a, b) => {
+      const al = a.getChunks().length
+      const bl = b.getChunks().length
+      return al === bl ? Math.random() - 0.5 : al > bl ? 1 : -1
+    })
   }
 }
