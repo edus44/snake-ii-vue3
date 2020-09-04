@@ -23,12 +23,18 @@ export type Bounds = {
   cols: number
   rows: number
 }
+
 export type Size = {
   width: number
   height: number
 }
 
 export type Position = {
-  col: number
   row: number
+  col: number
+}
+
+export type Pos = {
+  x: number
+  y: number
 }
