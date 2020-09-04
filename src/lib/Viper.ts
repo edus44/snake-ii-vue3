@@ -71,7 +71,7 @@ export class Viper extends Drawable {
   }
 
   private updateChunkAlert(isCrashing: boolean) {
-    this.chunks.forEach(x => x.setAlert(isCrashing))
+    this.chunks.forEach(x => x.setFaded(isCrashing))
   }
 
   private isCrashing() {
