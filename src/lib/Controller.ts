@@ -38,16 +38,22 @@ export class Controller {
     this.draw()
   }
 
+  getHandlerDir() {
+    return this.handlerDir
+  }
+
   bind() {
     this.canvas.addEventListener('mousedown', this.start)
     this.canvas.addEventListener('mousemove', this.move)
     this.canvas.addEventListener('mouseup', this.end)
+    this.canvas.addEventListener('mouseleave', this.end)
   }
 
   unbind() {
     this.canvas.removeEventListener('mousedown', this.start)
     this.canvas.removeEventListener('mousemove', this.move)
     this.canvas.removeEventListener('mouseup', this.end)
+    this.canvas.removeEventListener('mouseleave', this.end)
   }
 
   @bound

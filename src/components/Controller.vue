@@ -7,19 +7,18 @@ import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue'
 import { Controller } from '../lib/Controller'
 
 export default {
-  props: ['player'],
   setup(props, { emit }) {
     const canvas = ref<HTMLCanvasElement>()
     const controller = ref<Controller>()
-    console.log(props)
+
     onMounted(() => {
       controller.value = new Controller(canvas.value, {
         width: 300,
         height: 200,
       })
+
       watchEffect(() => {
-        console.log(controller.value.handlerDir)
-        emit('dir', { player: props.player, dir: controller.value.handlerDir })
+        emit('dir', controller.value.getHandlerDir())
       })
     })
 

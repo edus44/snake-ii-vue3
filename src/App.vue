@@ -1,7 +1,8 @@
 <template>
   <Board ref="board" />
-  <Controller @dir="changeDir" :player="0" />
-  <Controller @dir="changeDir" :player="1" />
+  <Controller @dir="dir => changeDir(0, dir)" />
+  <Controller @dir="dir => changeDir(1, dir)" />
+  <Controller @dir="dir => changeDir(2, dir)" />
 </template>
 
 <script lang="ts">
@@ -16,8 +17,7 @@ export default {
 
     return {
       board,
-      changeDir({ player, dir }: { player: number; dir: Dir }) {
-        // console.log(dir, board.value.game.tur)
+      changeDir(player: number, dir: Dir) {
         board.value.game.turnViper(player, dir)
       },
     }
