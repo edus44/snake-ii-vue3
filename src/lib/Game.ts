@@ -2,14 +2,13 @@ import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
 import { Dir, Position, Color } from './types'
-import { shuffle, bound } from './utils'
+import { bound } from './utils'
 
 export class Game {
   private board: Board
   private store: Store
   private vipers: Viper[] = []
   private movesPerSecond = 4
-  private tickNumber = 0
   constructor(...args: ConstructorParameters<typeof Board>) {
     this.board = new Board(...args)
     this.store = new Store(this.board.getBounds())
@@ -31,7 +30,6 @@ export class Game {
 
     this.board.draw([this.store, ...this.vipers])
 
-    this.tickNumber++
     return true
   }
 

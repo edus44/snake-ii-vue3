@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "target": "ESNext",
+    "strict": true,
+    "noUnusedLocals": true,
+    "moduleResolution": "node"
   }
 }

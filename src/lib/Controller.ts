@@ -7,7 +7,7 @@ export class Controller {
   private readonly center: Pos
   private readonly boundsRect: DOMRect
 
-  private handlerPos: Pos
+  private handlerPos: Pos = { x: 0, y: 0 }
   private handlerDir = ref<Dir>()
   private holding = false
 
@@ -21,7 +21,9 @@ export class Controller {
   private bgColor = 'rgb(50, 220, 147, 0.3)'
 
   constructor(private readonly canvas: HTMLCanvasElement, private readonly size: Size) {
-    this.ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Invalid canvas')
+    this.ctx = ctx
     canvas.width = size.width
     canvas.height = size.height
 
@@ -134,7 +136,7 @@ export class Controller {
   }
 }
 
-function getDir({ x, y }: Pos): Dir {
+function getDir({ x, y }: Pos): Dir | undefined {
   let deadZone = 0.2
   if (Math.abs(x) > Math.abs(y)) {
     if (x > deadZone) return Dir.right
@@ -143,4 +145,5 @@ function getDir({ x, y }: Pos): Dir {
     if (y > deadZone) return Dir.down
     else if (y < -deadZone) return Dir.up
   }
+  return undefined
 }

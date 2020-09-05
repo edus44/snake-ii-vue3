@@ -224,10 +224,12 @@ export const Body: FigureMap = {
   },
 }
 
-Body.right.up = Body.down.left
-Body.right.down = Body.up.left
-Body.left.up = Body.down.right
-Body.left.down = Body.up.right
+if (Body.right && Body.down && Body.up && Body.left) {
+  Body.right.up = Body.down.left
+  Body.right.down = Body.up.left
+  Body.left.up = Body.down.right
+  Body.left.down = Body.up.right
+}
 
 export const BodyDigesting: FigureMap = {
   up: {
@@ -299,14 +301,16 @@ export const BodyDigesting: FigureMap = {
   },
 }
 
-BodyDigesting.left.left = BodyDigesting.up.up
-BodyDigesting.down.down = BodyDigesting.right.right
+if (BodyDigesting.right && BodyDigesting.down && BodyDigesting.up && BodyDigesting.left) {
+  BodyDigesting.left.left = BodyDigesting.up.up
+  BodyDigesting.down.down = BodyDigesting.right.right
 
-BodyDigesting.right.up = BodyDigesting.down.left
-BodyDigesting.right.down = BodyDigesting.up.left
+  BodyDigesting.right.up = BodyDigesting.down.left
+  BodyDigesting.right.down = BodyDigesting.up.left
 
-BodyDigesting.left.up = BodyDigesting.down.right
-BodyDigesting.left.down = BodyDigesting.up.right
+  BodyDigesting.left.up = BodyDigesting.down.right
+  BodyDigesting.left.down = BodyDigesting.up.right
+}
 
 export const Food: FigureMapFood = {
   regular: [

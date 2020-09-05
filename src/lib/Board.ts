@@ -1,4 +1,3 @@
-import { Figure } from './figures'
 import { Bounds, Size } from './types'
 import { Drawable } from './Drawable'
 import { Chunk } from './Chunk'
@@ -14,9 +13,11 @@ export class Board {
     private readonly bounds: Bounds,
     private readonly size: Size,
   ) {
-    this.ctx = canvas.getContext('2d')
-    canvas.width = size.width
-    canvas.height = size.height
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Invalid canvas')
+    this.ctx = ctx
+    this.canvas.width = size.width
+    this.canvas.height = size.height
     this.chunkSize = Math.min(size.width / bounds.cols, size.height / bounds.rows)
     this.pixelSize = this.chunkSize / 4
     this.gapSize = this.pixelSize * 0.05
