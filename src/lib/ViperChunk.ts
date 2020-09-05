@@ -6,8 +6,8 @@ import * as figures from './figures'
 export class ViperChunk extends Chunk {
   private outDir: Dir
   private position: Position
-  private faded: boolean
-  private digesting: boolean
+  private faded: boolean = false
+  private digesting: boolean = false
 
   constructor(
     private readonly bounds: Bounds,
@@ -53,9 +53,13 @@ export class ViperChunk extends Chunk {
   }
 
   getFigure(): Figure {
-    if (this.digesting && this.figureMap === figures.Body)
-      return figures.BodyDigesting[this.dir][this.outDir]
-    return this.figureMap[this.dir][this.outDir]
+    let figureMap = this.figureMap
+    if (this.digesting && this.figureMap === figures.Body) figureMap = figures.BodyDigesting
+
+    const figure = figureMap[this.dir][this.outDir]
+
+    if (!figure) throw new Error('Figure not found')
+    return figure
   }
 
   setFigure(figureMap: FigureMap, dir?: Dir, outDir?: Dir): ViperChunk {

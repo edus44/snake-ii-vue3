@@ -16,8 +16,10 @@ export class Board {
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('Invalid canvas')
     this.ctx = ctx
+
     this.canvas.width = size.width
     this.canvas.height = size.height
+
     this.chunkSize = Math.min(size.width / bounds.cols, size.height / bounds.rows)
     this.pixelSize = this.chunkSize / 4
     this.gapSize = this.pixelSize * 0.05

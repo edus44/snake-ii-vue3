@@ -69,19 +69,23 @@ export class Viper extends Drawable<ViperChunk> {
 
   private isCrashing(vipers: Viper[]) {
     const ahead = this.getAhead()
-    let crashedChunk: ViperChunk
+    let crashedChunk: ViperChunk | undefined
     for (let viper of vipers) {
       crashedChunk = viper.intersects(ahead)
       if (crashedChunk) break
     }
     // return  crashedChunk && canShrink && isNotSelfTail
-    return crashedChunk && this.chunks.length > this.minLength && crashedChunk !== this.getChunk(-1)
+    return !!(
+      crashedChunk &&
+      this.chunks.length > this.minLength &&
+      crashedChunk !== this.getChunk(-1)
+    )
   }
 
   private advanceHead(store: Store) {
     // Move head one position to current dir
     const head = this.getChunk(0)
-    head.setFigure(figures.Body, null, this.dir)
+    head.setFigure(figures.Body, undefined, this.dir)
     const newHead = head.clone().setFigure(figures.Head, this.dir).move(1)
     this.chunks.unshift(newHead)
 

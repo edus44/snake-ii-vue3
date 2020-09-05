@@ -10,7 +10,7 @@ export enum FoodType {
 }
 
 export type Figure = [number, number][]
-export type FigureMap = Partial<Record<Dir, Partial<Record<Dir, Figure>>>>
+export type FigureMap = Record<Dir, Partial<Record<Dir, Figure>>>
 export type FigureMapFood = Record<FoodType, Figure[]>
 
 export const Head: FigureMap = {
