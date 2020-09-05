@@ -2,6 +2,8 @@ import { Size, Pos, Dir } from './types'
 import { bound } from './utils'
 import { ref } from 'vue'
 
+const isTouch = 'ontouchstart' in window
+
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
   private readonly center: Pos
@@ -43,35 +45,47 @@ export class Controller {
   }
 
   bind() {
-    this.canvas.addEventListener('mousedown', this.start)
-    this.canvas.addEventListener('mousemove', this.move)
-    this.canvas.addEventListener('mouseup', this.end)
-    this.canvas.addEventListener('mouseleave', this.end)
+    if (isTouch) {
+      this.canvas.addEventListener('touchstart', this.start)
+      this.canvas.addEventListener('touchmove', this.move)
+      this.canvas.addEventListener('touchend', this.end)
+    } else {
+      this.canvas.addEventListener('mousedown', this.start)
+      this.canvas.addEventListener('mousemove', this.move)
+      this.canvas.addEventListener('mouseup', this.end)
+      this.canvas.addEventListener('mouseleave', this.end)
+    }
   }
 
   unbind() {
-    this.canvas.removeEventListener('mousedown', this.start)
-    this.canvas.removeEventListener('mousemove', this.move)
-    this.canvas.removeEventListener('mouseup', this.end)
-    this.canvas.removeEventListener('mouseleave', this.end)
+    if (isTouch) {
+      this.canvas.removeEventListener('touchstart', this.start)
+      this.canvas.removeEventListener('touchmove', this.move)
+      this.canvas.removeEventListener('touchend', this.end)
+    } else {
+      this.canvas.removeEventListener('mousedown', this.start)
+      this.canvas.removeEventListener('mousemove', this.move)
+      this.canvas.removeEventListener('mouseup', this.end)
+      this.canvas.removeEventListener('mouseleave', this.end)
+    }
   }
 
   @bound
-  private start(e: MouseEvent) {
+  private start(e: MouseEvent | TouchEvent) {
     this.holding = true
     this.updateHandler(e)
     requestAnimationFrame(this.draw)
   }
 
   @bound
-  private move(e: MouseEvent) {
+  private move(e: MouseEvent | TouchEvent) {
     if (!this.holding) return
     this.updateHandler(e)
     requestAnimationFrame(this.draw)
   }
 
   @bound
-  private end(e: MouseEvent) {
+  private end() {
     this.holding = false
     this.resetHandler()
     requestAnimationFrame(this.draw)
@@ -81,36 +95,36 @@ export class Controller {
     this.handlerPos = { x: 0, y: 0 }
   }
 
-  updateHandler(e: MouseEvent) {
-    const coords: Pos = {
-      x: e.pageX - this.boundsRect.left,
-      y: e.pageY - this.boundsRect.top,
+  updateHandler(e: MouseEvent | TouchEvent) {
+    const coords = getCoords(e, this.boundsRect)
+
+    const d: Pos = {
+      x: (coords.x - this.center.x) / this.outerRadius,
+      y: (coords.y - this.center.y) / this.outerRadius,
     }
-    let dX = (coords.x - this.center.x) / this.outerRadius
-    let dY = (coords.y - this.center.y) / this.outerRadius
 
     //Distance to center
-    let mod = Math.sqrt(dX * dX + dY * dY)
+    let mod = Math.sqrt(d.x * d.x + d.y * d.y)
 
     //Off limits
     if (mod > 1) {
       //Angle
-      let angle = Math.atan(dY / dX)
+      let angle = Math.atan(d.y / d.x)
 
       //Intersect position
       let limX = Math.cos(angle)
       let limY = Math.sin(angle)
 
-      if (dX < 0) {
-        dX = -limX
-        dY = -limY
+      if (d.x < 0) {
+        d.x = -limX
+        d.y = -limY
       } else {
-        dX = limX
-        dY = limY
+        d.x = limX
+        d.y = limY
       }
     }
 
-    this.handlerPos = { x: dX, y: dY }
+    this.handlerPos = d
     this.handlerDir.value = getDir(this.handlerPos)
   }
 
@@ -152,4 +166,12 @@ function getDir({ x, y }: Pos): Dir | undefined {
     else if (y < -deadZone) return Dir.up
   }
   return undefined
+}
+
+function getCoords(e: MouseEvent | TouchEvent, bounds: DOMRect): Pos {
+  const ev = 'targetTouches' in e ? e.targetTouches[0] : e
+  return {
+    x: ev.pageX - bounds.left,
+    y: ev.pageY - bounds.top,
+  }
 }
