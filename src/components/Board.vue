@@ -16,7 +16,7 @@ export default {
     const game = ref<Game>()
 
     onMounted(() => {
-      const g = new Game(canvas.value, { cols: 20, rows: 13 }, { width: 600, height: 400 })
+      const g = new Game(canvas.value, { cols: 13, rows: 13 }, { width: 300, height: 300 })
       game.value = window['game'] = g
 
       g.addViper({ row: 5, col: 0 }, Dir.right, Color.blue)
