@@ -1,19 +1,26 @@
 <template>
-  <canvas ref="canvas" />
+  <canvas ref="canvas" :style="{ backgroundColor }" />
   <input v-model="size.width" />
   <input v-model="size.height" />
 </template>
 
 <script lang="ts">
-import { ref, onMounted, onBeforeUnmount, watchEffect, reactive } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watchEffect, reactive, computed } from 'vue'
 import { Controller } from '../lib/Controller'
-import { Size } from '../lib/types'
+import { Color, Size } from '../lib/types'
 
 export default {
+  props: {
+    color: {
+      required: true,
+      type: String as () => Color,
+    },
+  },
   setup(props, { emit }) {
     const canvas = ref<HTMLCanvasElement>()
     const controller = ref<Controller>()
     const size = reactive<Size>({ width: 200, height: 300 })
+    const backgroundColor = computed(() => Color[props.color])
 
     onMounted(() => {
       controller.value = new Controller(canvas.value, {
@@ -34,7 +41,7 @@ export default {
       controller.value.unbind()
     })
 
-    return { canvas, size }
+    return { canvas, size, backgroundColor }
   },
 }
 </script>
