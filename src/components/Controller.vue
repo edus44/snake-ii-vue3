@@ -1,12 +1,15 @@
 <template>
-  <canvas ref="canvas" :style="{ backgroundColor }" />
-  <input v-model="size.width" />
-  <input v-model="size.height" />
+  <div>
+    <canvas ref="canvas" :style="{ backgroundColor }" />
+    <input v-model="size.width" />
+    <input v-model="size.height" />
+  </div>
 </template>
 
 <script lang="ts">
 import { ref, onMounted, onBeforeUnmount, watchEffect, reactive, computed } from 'vue'
 import { Controller } from '../lib/Controller'
+import { useResize } from '../lib/uses/useResize'
 import { Color, Size } from '../lib/types'
 
 export default {
@@ -34,6 +37,10 @@ export default {
 
       watchEffect(() => {
         controller.value.setSize(size)
+      })
+
+      useResize((size: Size) => {
+        console.log(size)
       })
     })
 

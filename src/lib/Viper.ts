@@ -21,7 +21,7 @@ export class Viper extends Drawable<ViperChunk> {
 
   setDir(dir: Dir): Viper {
     const prevDir = this.nextDirs[this.nextDirs.length - 1] || this.dir
-    if (this.nextDirs.length < 5 && dir !== ReverseDir[prevDir] && dir !== prevDir) {
+    if (this.nextDirs.length < 3 && dir !== ReverseDir[prevDir] && dir !== prevDir) {
       this.nextDirs.push(dir)
     }
     return this

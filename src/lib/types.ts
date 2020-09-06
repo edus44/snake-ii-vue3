@@ -38,3 +38,9 @@ export type Pos = {
   x: number
   y: number
 }
+
+export interface Config {
+  numPlayers: 2 | 3 | 4
+  speed: 1 | 2 | 3
+  size: 1 | 2 | 3
+}

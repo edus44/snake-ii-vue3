@@ -8,8 +8,8 @@ export class Game {
   private board: Board
   private store: Store
   private vipers: Viper[] = []
-  private movesPerSecond = 4
-  constructor(...args: ConstructorParameters<typeof Board>) {
+
+  constructor(private readonly movesPerSecond = 4, ...args: ConstructorParameters<typeof Board>) {
     this.board = new Board(...args)
     this.store = new Store(this.board.getBounds())
   }

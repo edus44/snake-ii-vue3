@@ -4,23 +4,29 @@ import { Chunk } from './Chunk'
 
 export class Board {
   private readonly ctx: CanvasRenderingContext2D
-  private readonly chunkSize: number
-  private readonly pixelSize: number
-  private readonly gapSize: number
+  private chunkSize: number = 0
+  private pixelSize: number = 0
+  private gapSize: number = 0
+  private size: Size = { width: 0, height: 0 }
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
     private readonly bounds: Bounds,
-    private readonly size: Size,
+    size: Size,
   ) {
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('Invalid canvas')
     this.ctx = ctx
+    this.setSize(size)
+  }
+
+  setSize(size: Size) {
+    this.size = size
 
     this.canvas.width = size.width
     this.canvas.height = size.height
 
-    this.chunkSize = Math.min(size.width / bounds.cols, size.height / bounds.rows)
+    this.chunkSize = Math.min(size.width / this.bounds.cols, size.height / this.bounds.rows)
     this.pixelSize = this.chunkSize / 4
     this.gapSize = this.pixelSize * 0.05
   }
