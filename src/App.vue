@@ -1,6 +1,7 @@
 <template>
   <Board ref="board" />
   <Controller @dir="dir => changeDir(0, dir)" />
+  <Controller @dir="dir => changeDir(1, dir)" />
   <!-- <Controller @dir="dir => changeDir(1, dir)" />
   <Controller @dir="dir => changeDir(2, dir)" /> -->
 </template>

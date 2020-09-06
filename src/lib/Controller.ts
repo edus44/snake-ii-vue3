@@ -6,8 +6,9 @@ const isTouch = 'ontouchstart' in window
 
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
-  private readonly center: Pos
-  private readonly boundsRect: DOMRect
+  private size: Size = { width: 0, height: 0 }
+  private center: Pos = { x: 0, y: 0 }
+  private boundsRect: DOMRect = new DOMRect()
 
   private handlerPos: Pos = { x: 0, y: 0 }
   private handlerDir = ref<Dir>()
@@ -22,21 +23,28 @@ export class Controller {
   private mainColor = 'rgb(50, 220, 147)'
   private bgColor = 'rgb(50, 220, 147, 0.3)'
 
-  constructor(private readonly canvas: HTMLCanvasElement, private readonly size: Size) {
+  constructor(private readonly canvas: HTMLCanvasElement, size: Size) {
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('Invalid canvas')
     this.ctx = ctx
-    canvas.width = size.width
-    canvas.height = size.height
 
-    this.boundsRect = canvas.getBoundingClientRect()
-
-    this.center = {
-      x: size.width / 2,
-      y: size.height / 2,
-    }
     this.resetHandler()
     this.bind()
+    this.setSize(size)
+  }
+
+  setSize(size: Size) {
+    this.size = size
+    this.canvas.width = this.size.width
+    this.canvas.height = this.size.height
+
+    this.boundsRect = this.canvas.getBoundingClientRect()
+
+    this.center = {
+      x: this.size.width / 2,
+      y: this.size.height / 2,
+    }
+
     this.draw()
   }
 
