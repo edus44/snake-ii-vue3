@@ -1,8 +1,6 @@
 <template>
-  <div>
+  <div ref="root">
     <canvas ref="canvas" :style="{ backgroundColor }" />
-    <input v-model="size.width" />
-    <input v-model="size.height" />
   </div>
 </template>
 
@@ -20,27 +18,28 @@ export default {
     },
   },
   setup(props, { emit }) {
+    const root = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
     const controller = ref<Controller>()
-    const size = reactive<Size>({ width: 200, height: 300 })
     const backgroundColor = computed(() => Color[props.color])
 
     onMounted(() => {
       controller.value = new Controller(canvas.value, {
-        width: 300,
-        height: 200,
+        width: 10,
+        height: 10,
       })
 
       watchEffect(() => {
         emit('dir', controller.value.getHandlerDir())
       })
 
-      watchEffect(() => {
-        controller.value.setSize(size)
-      })
-
       useResize((size: Size) => {
-        console.log(size)
+        const rect = root.value.getBoundingClientRect()
+
+        controller.value.setSize({
+          width: rect.width,
+          height: rect.height,
+        })
       })
     })
 
@@ -48,7 +47,7 @@ export default {
       controller.value.unbind()
     })
 
-    return { canvas, size, backgroundColor }
+    return { canvas, backgroundColor, root }
   },
 }
 </script>
@@ -57,5 +56,8 @@ export default {
 canvas {
   display: block;
   background-color: var(--viper-1-color);
+}
+div {
+  flex: 1;
 }
 </style>

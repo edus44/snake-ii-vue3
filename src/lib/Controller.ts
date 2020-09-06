@@ -35,6 +35,7 @@ export class Controller {
 
   setSize(size: Size) {
     this.size = size
+
     this.canvas.width = this.size.width
     this.canvas.height = this.size.height
 

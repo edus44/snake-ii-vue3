@@ -1,7 +1,7 @@
 <template>
   <template v-if="playing">
     <Game :config="config" />
-    <button @click="playing = false">stop</button>
+    <!-- <button @click="playing = false">stop</button> -->
   </template>
   <template v-else>
     <button @click="playing = true">play</button>
@@ -27,9 +27,9 @@ import { Config } from './lib/types'
 export default {
   components: { Game },
   setup() {
-    const playing = ref(false)
+    const playing = ref(true)
     const config = reactive<Config>({
-      numPlayers: 2,
+      numPlayers: 3,
       speed: 1,
       size: 1,
     })

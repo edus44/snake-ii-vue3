@@ -1,9 +1,17 @@
 <template>
-  <canvas ref="canvas" />
-  <Controller @dir="dir => changeDir(0, dir)" :color="'blue'" />
-  <!-- <Controller @dir="dir => changeDir(1, dir)" :color="'red'" />
-  <Controller @dir="dir => changeDir(2, dir)" :color="'yellow'" />
-  <Controller @dir="dir => changeDir(3, dir)" :color="'purple'" /> -->
+  <div class="game">
+    <div class="controllers">
+      <Controller @dir="dir => changeDir(1, dir)" :color="'red'" />
+      <Controller v-if="config.numPlayers > 2" @dir="dir => changeDir(2, dir)" :color="'yellow'" />
+    </div>
+    <div class="board">
+      <canvas ref="canvas" />
+    </div>
+    <div class="controllers">
+      <Controller @dir="dir => changeDir(0, dir)" :color="'blue'" />
+      <Controller v-if="config.numPlayers > 3" @dir="dir => changeDir(3, dir)" :color="'purple'" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -59,5 +67,22 @@ export default {
 canvas {
   display: block;
   background-color: var(--board-bg-color);
+}
+.game {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  & .controllers {
+    background-color: #fc0;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  & .board {
+    background-color: #0fc;
+    flex: 2;
+    width: 100%;
+  }
 }
 </style>
