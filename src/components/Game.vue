@@ -38,7 +38,7 @@ export default {
   components: {
     Controller,
   },
-  setup(props) {
+  setup({ config }) {
     const canvas = ref<HTMLCanvasElement>()
     let game: Game
     const boardHeight = ref<string>()
@@ -50,8 +50,8 @@ export default {
       // Players
       game.addViper({ row: 3, col: 2 }, Dir.right, Color.blue)
       game.addViper({ row: 5, col: 2 }, Dir.right, Color.red)
-      if (props.config.numPlayers > 2) game.addViper({ row: 7, col: 2 }, Dir.right, Color.yellow)
-      if (props.config.numPlayers > 3) game.addViper({ row: 9, col: 2 }, Dir.right, Color.purple)
+      if (config.numPlayers > 2) game.addViper({ row: 7, col: 2 }, Dir.right, Color.yellow)
+      if (config.numPlayers > 3) game.addViper({ row: 9, col: 2 }, Dir.right, Color.purple)
 
       // useSpaceKey(() => game!.tick(10000))
       useAnimationLoop(game.tick)
