@@ -24,19 +24,19 @@ export default {
     const backgroundColor = computed(() => Color[props.color])
 
     onMounted(() => {
-      controller.value = new Controller(canvas.value, {
+      controller.value = new Controller(canvas.value!, {
         width: 10,
         height: 10,
       })
 
       watchEffect(() => {
-        emit('dir', controller.value.getHandlerDir())
+        emit('dir', controller.value!.getHandlerDir())
       })
 
       useResize((size: Size) => {
-        const rect = root.value.getBoundingClientRect()
+        const rect = root.value!.getBoundingClientRect()
 
-        controller.value.setSize({
+        controller.value?.setSize({
           width: rect.width,
           height: rect.height,
         })
@@ -44,7 +44,7 @@ export default {
     })
 
     onBeforeUnmount(() => {
-      controller.value.unbind()
+      controller.value!.unbind()
     })
 
     return { canvas, backgroundColor, root }

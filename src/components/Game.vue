@@ -38,8 +38,9 @@ export default {
     const game = ref<Game>()
 
     onMounted(() => {
-      const g = new Game(2, canvas.value, { cols: 13, rows: 13 }, { width: 300, height: 300 })
-      game.value = window['game'] = g
+      const g = new Game(2, canvas.value!, { cols: 13, rows: 13 }, { width: 300, height: 300 })
+      game.value = g
+      ;(window as any)['game'] = g
 
       // Players
       g.addViper({ row: 3, col: 2 }, Dir.right, Color.blue)
