@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, onBeforeUnmount, watchEffect, reactive, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watchEffect, computed } from 'vue'
 import { Controller } from '../lib/Controller'
 import { useResize } from '../lib/uses/useResize'
 import { Color, Size } from '../lib/types'
@@ -14,7 +14,7 @@ export default {
   props: {
     color: {
       required: true,
-      type: String as () => Color,
+      type: String as () => keyof typeof Color,
     },
   },
   setup(props, { emit }) {

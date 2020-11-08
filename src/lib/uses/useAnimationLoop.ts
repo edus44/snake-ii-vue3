@@ -1,4 +1,4 @@
-import { onBeforeMount, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount } from 'vue'
 
 export const useAnimationLoop = (fn: (diff: number) => boolean) => {
   let active = true

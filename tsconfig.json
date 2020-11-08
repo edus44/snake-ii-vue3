@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "isolatedModules": true,
     "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+
+    "esModuleInterop": true,
+    "isolatedModules": true,
+
+    "experimentalDecorators": true,
+
     "strict": true,
     "noUnusedLocals": true,
-    "moduleResolution": "node"
+    "noUnusedParameters": true
   }
 }

@@ -19,7 +19,7 @@ const moves: Record<string, [number, Dir]> = {
 }
 
 export const useDirectionKeys = (fn: (idx: number, dir: Dir) => void) => {
-  const handler = e => {
+  const handler = (e: KeyboardEvent) => {
     const move = moves[e.key]
     if (move) fn(...move)
   }

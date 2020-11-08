@@ -1,7 +1,7 @@
 import { onBeforeUnmount } from 'vue'
 
 export const useSpaceKey = (fn: () => void) => {
-  const handler = e => {
+  const handler = (e: KeyboardEvent) => {
     if (e.key == ' ') {
       fn()
     }

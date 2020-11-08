@@ -18,7 +18,7 @@
 import { ref, onMounted } from 'vue'
 import { Game } from '../lib/Game'
 import { Color, Config, Dir } from '../lib/types'
-import { useSpaceKey } from '../lib/uses/useSpaceKey'
+// import { useSpaceKey } from '../lib/uses/useSpaceKey'
 import { useDirectionKeys } from '../lib/uses/useDirectionKeys'
 import { useAnimationLoop } from '../lib/uses/useAnimationLoop'
 import Controller from './Controller.vue'
