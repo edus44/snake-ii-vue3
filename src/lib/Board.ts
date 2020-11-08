@@ -23,8 +23,16 @@ export class Board {
   setSize(size: Size) {
     this.size = size
 
-    this.canvas.width = size.width
-    this.canvas.height = size.height
+    const boundsR = this.bounds.cols / this.bounds.rows
+    const sizeR = size.width / size.height
+
+    if (boundsR < sizeR) {
+      this.canvas.width = size.height * boundsR
+      this.canvas.height = size.height
+    } else {
+      this.canvas.width = size.width
+      this.canvas.height = size.width / boundsR
+    }
 
     this.chunkSize = Math.min(size.width / this.bounds.cols, size.height / this.bounds.rows)
     this.pixelSize = this.chunkSize / 4

@@ -4,6 +4,11 @@ import { ref } from 'vue'
 
 const isTouch = 'ontouchstart' in window
 
+const OUTER_RADIUS = 60
+const OUTER_LINE_WIDTH = 3
+const INNER_RADIUS = 10
+const HANDLER_RADIUS = 22
+
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
   private size: Size = { width: 0, height: 0 }
@@ -14,10 +19,10 @@ export class Controller {
   private handlerDir = ref<Dir>()
   private holding = false
 
-  private outerRadius = 60
-  private outerLineWidth = 3
-  private innerRadius = 10
-  private handlerRadius = 22
+  private outerRadius = OUTER_RADIUS
+  private outerLineWidth = OUTER_LINE_WIDTH
+  private innerRadius = INNER_RADIUS
+  private handlerRadius = HANDLER_RADIUS
 
   private handlerColor = 'rgba(255, 255, 255, 0.4)'
   private mainColor = 'rgb(50, 220, 147)'
@@ -39,14 +44,22 @@ export class Controller {
     this.canvas.width = this.size.width
     this.canvas.height = this.size.height
 
-    this.boundsRect = this.canvas.getBoundingClientRect()
-
     this.center = {
       x: this.size.width / 2,
       y: this.size.height / 2,
     }
 
+    this.setRadius(this.size.height * 0.7)
+
     this.draw()
+  }
+
+  setRadius(value: number) {
+    const r = value / 2 / OUTER_RADIUS
+    this.outerRadius = OUTER_RADIUS * r
+    this.outerLineWidth = OUTER_LINE_WIDTH * r
+    this.innerRadius = INNER_RADIUS * r
+    this.handlerRadius = HANDLER_RADIUS * r
   }
 
   getHandlerDir() {
@@ -81,6 +94,7 @@ export class Controller {
 
   @bound
   private start(e: MouseEvent | TouchEvent) {
+    this.boundsRect = this.canvas.getBoundingClientRect()
     this.holding = true
     this.updateHandler(e)
     requestAnimationFrame(this.draw)

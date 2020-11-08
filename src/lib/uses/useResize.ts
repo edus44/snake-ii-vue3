@@ -10,6 +10,7 @@ export const useResize = (fn: (size: Size) => void) => {
   }
 
   window.addEventListener('resize', handler)
+  handler()
 
   onBeforeUnmount(() => {
     window.removeEventListener('resize', handler)

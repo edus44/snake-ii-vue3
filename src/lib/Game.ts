@@ -1,7 +1,7 @@
 import { Board } from './Board'
 import { Viper } from './Viper'
 import { Store } from './Store'
-import { Dir, Position, Color } from './types'
+import { Dir, Position, Color, Size } from './types'
 import { bound } from './utils'
 
 export class Game {
@@ -17,6 +17,10 @@ export class Game {
   addViper(position: Position, dir: Dir, color: Color) {
     const viper = new Viper(this.board.getBounds(), position, dir, color)
     this.vipers.push(viper)
+  }
+
+  setBoardSize(size: Size) {
+    this.board.setSize(size)
   }
 
   @bound turnViper(viperIdx: number, dir: Dir) {

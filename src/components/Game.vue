@@ -1,14 +1,18 @@
 <template>
   <div class="game">
     <div class="controllers">
-      <Controller @dir="dir => changeDir(1, dir)" :color="'red'" />
+      <Controller @dir="dir => changeDir(1, dir)" :color="'red'" :single="config.numPlayers == 2" />
       <Controller v-if="config.numPlayers > 2" @dir="dir => changeDir(2, dir)" :color="'yellow'" />
     </div>
-    <div class="board">
+    <div class="board" :style="{ height: boardHeight }">
       <canvas ref="canvas" />
     </div>
     <div class="controllers">
-      <Controller @dir="dir => changeDir(0, dir)" :color="'blue'" />
+      <Controller
+        @dir="dir => changeDir(0, dir)"
+        :color="'blue'"
+        :single="config.numPlayers == 3"
+      />
       <Controller v-if="config.numPlayers > 3" @dir="dir => changeDir(3, dir)" :color="'purple'" />
     </div>
   </div>
@@ -22,6 +26,7 @@ import { Color, Config, Dir } from '../lib/types'
 import { useDirectionKeys } from '../lib/uses/useDirectionKeys'
 import { useAnimationLoop } from '../lib/uses/useAnimationLoop'
 import Controller from './Controller.vue'
+import { useResize } from '../lib/uses/useResize'
 
 export default {
   props: {
@@ -36,9 +41,10 @@ export default {
   setup(props) {
     const canvas = ref<HTMLCanvasElement>()
     let game: Game
+    const boardHeight = ref<string>()
 
     onMounted(() => {
-      game = new Game(2, canvas.value!, { cols: 13, rows: 13 }, { width: 300, height: 300 })
+      game = new Game(2, canvas.value!, { cols: 20, rows: 13 }, { width: 100, height: 100 })
       ;(window as any).game = game
 
       // Players
@@ -50,10 +56,19 @@ export default {
       // useSpaceKey(() => game!.tick(10000))
       useAnimationLoop(game.tick)
       useDirectionKeys(game.turnViper)
+
+      useResize(size => {
+        game.setBoardSize({
+          width: size.width,
+          height: size.height / 2,
+        })
+        boardHeight.value = size.height / 2 + 'px'
+      })
     })
 
     return {
       canvas,
+      boardHeight,
       changeDir(player: number, dir: Dir) {
         game.turnViper(player, dir)
       },
@@ -65,23 +80,18 @@ export default {
 <style lang="postcss" scoped>
 canvas {
   display: block;
-  background-color: var(--board-bg-color);
 }
 .game {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-
   & .controllers {
-    background-color: #fc0;
-    flex: 1;
     display: flex;
-    overflow: hidden;
   }
   & .board {
-    background-color: #0fc;
-    flex: 2;
-    width: 100%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    & canvas {
+      background-color: var(--board-bg-color);
+    }
   }
 }
 </style>

@@ -1,7 +1,5 @@
 <template>
-  <div ref="root">
-    <canvas ref="canvas" :style="{ backgroundColor }" />
-  </div>
+  <canvas ref="canvas" :style="{ backgroundColor }" />
 </template>
 
 <script lang="ts">
@@ -16,10 +14,13 @@ export default {
       required: true,
       type: String as () => keyof typeof Color,
     },
+    single: {
+      default: false,
+      type: Boolean,
+    },
   },
   setup(props, { emit }) {
     let controller: Controller
-    const root = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
     const backgroundColor = computed(() => Color[props.color])
 
@@ -34,12 +35,10 @@ export default {
         if (dir) emit('dir', dir)
       })
 
-      useResize(() => {
-        const rect = root.value!.getBoundingClientRect()
-
+      useResize(size => {
         controller.setSize({
-          width: rect.width,
-          height: rect.height,
+          width: size.width / (props.single ? 1 : 2),
+          height: size.height / 4,
         })
       })
     })
@@ -48,17 +47,7 @@ export default {
       controller.unbind()
     })
 
-    return { canvas, backgroundColor, root }
+    return { canvas, backgroundColor }
   },
 }
 </script>
-
-<style lang="postcss" scoped>
-canvas {
-  display: block;
-  background-color: var(--viper-1-color);
-}
-div {
-  flex: 1;
-}
-</style>
