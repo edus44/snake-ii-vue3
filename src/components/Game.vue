@@ -35,29 +35,27 @@ export default {
   },
   setup(props) {
     const canvas = ref<HTMLCanvasElement>()
-    const game = ref<Game>()
+    let game: Game
 
     onMounted(() => {
-      const g = new Game(2, canvas.value!, { cols: 13, rows: 13 }, { width: 300, height: 300 })
-      game.value = g
-      ;(window as any)['game'] = g
+      game = new Game(2, canvas.value!, { cols: 13, rows: 13 }, { width: 300, height: 300 })
+      ;(window as any).game = game
 
       // Players
-      g.addViper({ row: 3, col: 2 }, Dir.right, Color.blue)
-      g.addViper({ row: 5, col: 2 }, Dir.right, Color.red)
-      if (props.config.numPlayers > 2) g.addViper({ row: 7, col: 2 }, Dir.right, Color.yellow)
-      if (props.config.numPlayers > 3) g.addViper({ row: 9, col: 2 }, Dir.right, Color.purple)
+      game.addViper({ row: 3, col: 2 }, Dir.right, Color.blue)
+      game.addViper({ row: 5, col: 2 }, Dir.right, Color.red)
+      if (props.config.numPlayers > 2) game.addViper({ row: 7, col: 2 }, Dir.right, Color.yellow)
+      if (props.config.numPlayers > 3) game.addViper({ row: 9, col: 2 }, Dir.right, Color.purple)
 
-      // useSpaceKey(() => g.tick(10000))
-      useAnimationLoop(g.tick)
-      useDirectionKeys(g.turnViper)
+      // useSpaceKey(() => game!.tick(10000))
+      useAnimationLoop(game.tick)
+      useDirectionKeys(game.turnViper)
     })
 
     return {
       canvas,
-      game,
       changeDir(player: number, dir: Dir) {
-        game.value?.turnViper(player, dir)
+        game.turnViper(player, dir)
       },
     }
   },

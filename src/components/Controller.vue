@@ -8,7 +8,7 @@
 import { ref, onMounted, onBeforeUnmount, watchEffect, computed } from 'vue'
 import { Controller } from '../lib/Controller'
 import { useResize } from '../lib/uses/useResize'
-import { Color, Size } from '../lib/types'
+import { Color } from '../lib/types'
 
 export default {
   props: {
@@ -18,25 +18,26 @@ export default {
     },
   },
   setup(props, { emit }) {
+    let controller: Controller
     const root = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
-    const controller = ref<Controller>()
     const backgroundColor = computed(() => Color[props.color])
 
     onMounted(() => {
-      controller.value = new Controller(canvas.value!, {
+      controller = new Controller(canvas.value!, {
         width: 10,
         height: 10,
       })
 
       watchEffect(() => {
-        emit('dir', controller.value!.getHandlerDir())
+        const dir = controller.getHandlerDir().value
+        if (dir) emit('dir', dir)
       })
 
-      useResize((size: Size) => {
+      useResize(() => {
         const rect = root.value!.getBoundingClientRect()
 
-        controller.value?.setSize({
+        controller.setSize({
           width: rect.width,
           height: rect.height,
         })
@@ -44,7 +45,7 @@ export default {
     })
 
     onBeforeUnmount(() => {
-      controller.value!.unbind()
+      controller.unbind()
     })
 
     return { canvas, backgroundColor, root }

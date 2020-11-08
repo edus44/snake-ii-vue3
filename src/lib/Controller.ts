@@ -102,6 +102,7 @@ export class Controller {
 
   resetHandler() {
     this.handlerPos = { x: 0, y: 0 }
+    this.handlerDir.value = undefined
   }
 
   updateHandler(e: MouseEvent | TouchEvent) {
