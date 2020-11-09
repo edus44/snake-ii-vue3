@@ -6,8 +6,8 @@ const isTouch = 'ontouchstart' in window
 
 const OUTER_RADIUS = 60
 const OUTER_LINE_WIDTH = 3
-const INNER_RADIUS = 10
-const HANDLER_RADIUS = 22
+const INNER_RADIUS = 4
+const HANDLER_RADIUS = 25
 
 export class Controller {
   private readonly ctx: CanvasRenderingContext2D
@@ -25,6 +25,7 @@ export class Controller {
   private handlerRadius = HANDLER_RADIUS
 
   private handlerColor = 'rgba(255, 255, 255, 0.4)'
+  private dirColor = 'rgba(255, 255, 255, 0.2)'
   private mainColor = 'rgb(50, 220, 147)'
   private bgColor = 'rgb(50, 220, 147, 0.3)'
 
@@ -158,6 +159,29 @@ export class Controller {
 
   @bound draw() {
     this.ctx.clearRect(0, 0, this.size.width, this.size.height)
+
+    // Dir
+    const dir = this.handlerDir.value
+    if (dir) {
+      this.ctx.beginPath()
+
+      const c = this.center
+      const des = this.size.width
+      this.ctx.moveTo(c.x, c.y)
+
+      if (dir == Dir.up) this.ctx.lineTo(c.x - des, c.y - des)
+      if (dir == Dir.right) this.ctx.lineTo(c.x + des, c.y - des)
+      if (dir == Dir.down) this.ctx.lineTo(c.x + des, c.y + des)
+      if (dir == Dir.left) this.ctx.lineTo(c.x - des, c.y + des)
+
+      if (dir == Dir.up) this.ctx.lineTo(c.x + des, c.y - des)
+      if (dir == Dir.right) this.ctx.lineTo(c.x + des, c.y + des)
+      if (dir == Dir.down) this.ctx.lineTo(c.x - des, c.y + des)
+      if (dir == Dir.left) this.ctx.lineTo(c.x - des, c.y - des)
+
+      this.ctx.fillStyle = this.dirColor
+      this.ctx.fill()
+    }
 
     // Outer
     this.ctx.beginPath()
