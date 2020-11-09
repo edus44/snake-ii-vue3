@@ -89,6 +89,7 @@ canvas {
     display: grid;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     & canvas {
       background-color: var(--board-bg-color);
       box-shadow: 0 0 0 20px rgba(var(--board-bg-color-comps), 0.4),
