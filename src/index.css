@@ -1,11 +1,13 @@
 :root {
-  --body-bg-color: #ccc;
+  --body-bg-color: rgb(171 193 174);
+  --body-bg-color-comps: 171, 193, 174;
   --board-bg-color: #8ea792;
+  --board-bg-color-comps: 142, 167, 146;
   --front-color: #060e0c;
-  --viper-1-color: #2240c0;
-  --viper-2-color: #ba143e;
-  --viper-3-color: #ffb410;
-  --viper-4-color: #8c35ee;
+  --viper-blue: #2240c0;
+  --viper-red: #ba143e;
+  --viper-yellow: #ffb410;
+  --viper-purple: #8c35ee;
 }
 
 body,
@@ -18,7 +20,7 @@ html {
   cursor: default;
   font-size: 10px;
   box-sizing: border-box;
-  background-color: rgb(171 193 174);
+  background-color: var(--body-bg-color);
 }
 
 *,

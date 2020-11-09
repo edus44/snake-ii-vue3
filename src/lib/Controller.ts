@@ -39,17 +39,21 @@ export class Controller {
   }
 
   setSize(size: Size) {
+    const dpr = window.devicePixelRatio
     this.size = size
 
-    this.canvas.width = this.size.width
-    this.canvas.height = this.size.height
+    this.canvas.style.width = size.width + 'px'
+    this.canvas.style.height = size.height + 'px'
+    this.canvas.width = size.width * dpr
+    this.canvas.height = size.height * dpr
+    this.ctx.scale(dpr, dpr)
 
     this.center = {
-      x: this.size.width / 2,
-      y: this.size.height / 2,
+      x: size.width / 2,
+      y: size.height / 2,
     }
 
-    this.setRadius(this.size.height * 0.7)
+    this.setRadius(size.height * 0.7)
 
     this.draw()
   }

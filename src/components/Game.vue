@@ -44,7 +44,7 @@ export default {
     const boardHeight = ref<string>()
 
     onMounted(() => {
-      game = new Game(2, canvas.value!, { cols: 20, rows: 13 }, { width: 100, height: 100 })
+      game = new Game(2, canvas.value!, { cols: 20, rows: 9 }, { width: 100, height: 100 })
       ;(window as any).game = game
 
       // Players
@@ -91,6 +91,8 @@ canvas {
     justify-content: center;
     & canvas {
       background-color: var(--board-bg-color);
+      box-shadow: 0 0 0 20px rgba(var(--board-bg-color-comps), 0.4),
+        0 0 0 40px rgba(var(--board-bg-color-comps), 0.4);
     }
   }
 }
