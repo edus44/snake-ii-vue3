@@ -4,7 +4,9 @@
       <ControllersRow :row="topPlayersRow" @dir="changeDir" />
     </div>
     <div class="board" :style="{ height: boardHeight }">
+      <span>a</span>
       <canvas ref="canvas" />
+      <span>b</span>
     </div>
     <div class="controllers">
       <ControllersRow :row="bottomPlayersRow" @dir="changeDir" />
@@ -91,8 +93,9 @@ canvas {
   }
   & .board {
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    justify-content: center;
+    justify-items: center;
     overflow: hidden;
     & canvas {
       background-color: var(--board-bg-color);
