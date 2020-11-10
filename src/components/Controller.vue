@@ -12,7 +12,7 @@ export default {
   props: {
     color: {
       required: true,
-      type: String as () => keyof typeof Color,
+      type: String as () => Color,
     },
     single: {
       default: false,

@@ -1,19 +1,13 @@
 <template>
   <div class="game">
     <div class="controllers">
-      <Controller @dir="dir => changeDir(1, dir)" :color="'red'" :single="config.numPlayers == 2" />
-      <Controller v-if="config.numPlayers > 2" @dir="dir => changeDir(2, dir)" :color="'yellow'" />
+      <ControllersRow :row="topPlayersRow" @dir="changeDir" />
     </div>
     <div class="board" :style="{ height: boardHeight }">
       <canvas ref="canvas" />
     </div>
     <div class="controllers">
-      <Controller
-        @dir="dir => changeDir(0, dir)"
-        :color="'blue'"
-        :single="config.numPlayers == 3"
-      />
-      <Controller v-if="config.numPlayers > 3" @dir="dir => changeDir(3, dir)" :color="'purple'" />
+      <ControllersRow :row="bottomPlayersRow" @dir="changeDir" />
     </div>
   </div>
 </template>
@@ -25,8 +19,8 @@ import { Color, Config, Dir } from '../lib/types'
 // import { useSpaceKey } from '../lib/uses/useSpaceKey'
 import { useDirectionKeys } from '../lib/uses/useDirectionKeys'
 import { useAnimationLoop } from '../lib/uses/useAnimationLoop'
-import Controller from './Controller.vue'
 import { useResize } from '../lib/uses/useResize'
+import ControllersRow from './Game/ControllersRow.vue'
 
 export default {
   props: {
@@ -36,7 +30,7 @@ export default {
     },
   },
   components: {
-    Controller,
+    ControllersRow,
   },
   setup({ config }) {
     const canvas = ref<HTMLCanvasElement>()
@@ -44,7 +38,7 @@ export default {
     const boardHeight = ref<string>()
 
     onMounted(() => {
-      game = new Game(2, canvas.value!, { cols: 20, rows: 9 }, { width: 100, height: 100 })
+      game = new Game(2, canvas.value!, { cols: 15, rows: 15 }, { width: 100, height: 100 })
       ;(window as any).game = game
 
       // Players
@@ -53,10 +47,7 @@ export default {
       if (config.numPlayers > 2) game.addViper({ row: 7, col: 2 }, Dir.right, Color.yellow)
       if (config.numPlayers > 3) game.addViper({ row: 9, col: 2 }, Dir.right, Color.purple)
 
-      // useSpaceKey(() => game!.tick(10000))
-      useAnimationLoop(game.tick)
-      useDirectionKeys(game.turnViper)
-
+      // Board size
       useResize(size => {
         game.setBoardSize({
           width: size.width,
@@ -64,12 +55,25 @@ export default {
         })
         boardHeight.value = size.height / 2 + 'px'
       })
+
+      // Bindings
+      useAnimationLoop(game.tick)
+      useDirectionKeys(game.turnViper)
+      // useSpaceKey(() => game!.tick(10000))
     })
 
     return {
       canvas,
       boardHeight,
-      changeDir(player: number, dir: Dir) {
+      topPlayersRow: [
+        [1, 'red'],
+        [3, 'yellow'],
+      ],
+      bottomPlayersRow: [
+        [0, 'blue'],
+        [4, 'purple'],
+      ],
+      changeDir([player, dir]: [number, Dir]) {
         game.turnViper(player, dir)
       },
     }

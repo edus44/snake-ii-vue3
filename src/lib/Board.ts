@@ -21,9 +21,11 @@ export class Board {
   }
 
   setSize(size: Size) {
-    this.size = size
+    // Padding
+    size.width -= 120
+    size.height -= 80
 
-    const dpr = window.devicePixelRatio
+    // Respect ratio
     const boundsR = this.bounds.cols / this.bounds.rows
     const sizeR = size.width / size.height
     let width = size.width
@@ -34,15 +36,20 @@ export class Board {
       height = width / boundsR
     }
 
+    // Apply device dpi
+    const dpr = window.devicePixelRatio
     this.canvas.style.width = width + 'px'
     this.canvas.style.height = height + 'px'
     this.canvas.width = width * dpr
     this.canvas.height = height * dpr
     this.ctx.scale(dpr, dpr)
 
+    // Calculate chunks and pixel size
     this.chunkSize = Math.min(size.width / this.bounds.cols, size.height / this.bounds.rows)
     this.pixelSize = this.chunkSize / 4
     this.gapSize = this.pixelSize * 0.05
+
+    this.size = size
   }
 
   getBounds() {
